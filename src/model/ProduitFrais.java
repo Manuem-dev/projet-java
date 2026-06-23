@@ -2,47 +2,41 @@ package model;
 
 import java.time.LocalDate;
 
-
 public class ProduitFrais extends Produit {
 
     // _____==== EXERCICE 1 : GESTION DES PRODUITS ====_____
 
     // Attributs
-	private LocalDate datePeremption; // Libre d'utiliser aussi Date à la place
-    private double temperatureConservation;
-
-    // Méthodes
+    private LocalDate datePeremption;
+    private double temperatureConservation; // en degrés Celsius
 
     // Constructeur d'initialisation
-	public ProduitFrais(int pReference, int pQuantiteStock, double pPrixAchat, double pPrixVente, String pDesignation,double pTemperatureConservation,LocalDate pDatePeremption) {
-		super(pReference, pQuantiteStock, pPrixAchat, pPrixVente, pDesignation);
-        datePeremption = pDatePeremption;
+    public ProduitFrais(int pReference, int pQuantiteStock, double pPrixAchat, double pPrixVente,
+                         String pDesignation, double pTemperatureConservation, LocalDate pDatePeremption) {
+        super(pReference, pQuantiteStock, pPrixAchat, pPrixVente, pDesignation);
         temperatureConservation = pTemperatureConservation;
-		
-	}
+        datePeremption = pDatePeremption;
+    }
 
-	// Getters
-	
-	public LocalDate getDatePeremption() {
-		return datePeremption;
-	}
+    // Vérifier si le produit est périmé
+    public boolean estPerime() {
+        return LocalDate.now().isAfter(datePeremption);
+    }
 
-	public double getTemperatureConservation() {
-		return temperatureConservation;
-	}
-	
-	// Setters
-	
-	public void setDatePeremption(LocalDate datePeremption) {
-		this.datePeremption = datePeremption;
-	}
+    // toString enrichi
+    @Override
+    public String toString() {
+        return super.toString()
+                + " | Date de péremption: " + datePeremption
+                + " | Temp. conservation: " + temperatureConservation + "°C"
+                + (estPerime() ? " [PÉRIMÉ]" : " [OK]");
+    }
 
-	public void setTemperatureConservation(double temperatureConservation) {
-		this.temperatureConservation = temperatureConservation;
-	}
-	
-	
+    // Getters
+    public LocalDate getDatePeremption()          { return datePeremption; }
+    public double getTemperatureConservation()     { return temperatureConservation; }
 
-
-
+    // Setters
+    public void setDatePeremption(LocalDate datePeremption)              { this.datePeremption = datePeremption; }
+    public void setTemperatureConservation(double temperatureConservation){ this.temperatureConservation = temperatureConservation; }
 }

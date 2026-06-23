@@ -1,80 +1,92 @@
 package model;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 
-
 public class Vente {
-	
-	// _____==== EXERCICE 7 : MODULE CAISSE ET VENTE ====_____
 
-	// Attributs
-	private int numeroVente;
-	private LocalDate date; // Date aussi pourrait passer
-	private Client client;
-	private Caissier caissier;
-	private ArrayList <Produit> panier;
-	
-	// Méthodes
+    // _____==== EXERCICE 7 : MODULE CAISSE ET VENTE ====_____
 
-	// Constructeur d'initialisation
-	public Vente(int pNumeroVente, LocalDate pDate, Client pClient, Caissier pCaissier, ArrayList<Produit> pPanier) {
-		numeroVente = pNumeroVente;
-		date = pDate;
-		client = pClient;
-		caissier = pCaissier;
-		panier = pPanier;
-	}
+    // Attributs respectant strictement le PDF
+    private int numeroVente;
+    private Date date;
+    private Client client;
+    private Caissier caissier;
+    private ArrayList<Produit> panier;
+    
+    // Attribut supplémentaire pour la gestion interne
+    private boolean validee;
 
-	// Ajout au panier
-	public void ajouterProduit(Produit pProduit){
-		panier.add(pProduit);
-	}
+    // Constructeur d'initialisation
+    public Vente(int pNumeroVente, Date pDate, Client pClient, Caissier pCaissier) {
+        numeroVente = pNumeroVente;
+        date        = pDate;
+        client      = pClient;
+        caissier    = pCaissier;
+        panier      = new ArrayList<>();
+        validee     = false;
+    }
 
-	// retirer du panier
-	public void supprimerProduit(Produit pProduit){
-		panier.remove(pProduit);
-	}
+    // Ajout au panier
+    public void ajouterProduit(Produit pProduit) {
+        if (validee) {
+            System.out.println("Vente déjà validée, impossible de modifier le panier.");
+            return;
+        }
+        if (pProduit.getQuantiteStock() > 0) {
+            panier.add(pProduit);
+        } else {
+            System.out.println("Stock insuffisant pour : " + pProduit.getDesignation());
+        }
+    }
 
-	// Calcul du total du panier
-	public double calculTotal(){
-		double total = 0.0;
-		for (Produit produit : panier) {
-			total = total + produit.getPrixVente();
-		}
-		return total;
-		
-	}
-	
-	// Validation de la vente
-	public void validerVente(){
-		// à faire après création de la classe Paiement
-	}
-	
-	
-	// Getters
-	
-	public int getNumeroVente() {
-		return numeroVente;
-	}
+    // Retirer du panier
+    public void supprimerProduit(Produit pProduit) {
+        if (validee) return;
+        panier.remove(pProduit);
+    }
 
-	public LocalDate getDate() {
-		return date;
-	}
+    // Calcul du total de la vente
+    public double calculerTotal() {
+        double total = 0.0;
+        for (Produit produit : panier) {
+            total += produit.getPrixVente();
+        }
+        return total;
+    }
 
-	public Client getClient() {
-		return client;
-	}
+    // Validation de la vente : décrémente le stock de chaque produit
+    public void validerVente() {
+        if (validee) {
+            System.out.println("Vente n°" + numeroVente + " déjà validée.");
+            return;
+        }
+        for (Produit produit : panier) {
+            produit.retirerStock(1);
+        }
+        validee = true;
+        // Enregistrer dans l'historique du client
+        if (client != null) {
+            client.ajouterVenteHistorique(this);
+        }
+        System.out.println("Vente n°" + numeroVente + " validée. Total : "
+                + String.format("%.2f", calculerTotal()) + " €");
+    }
 
-	public Caissier getCaissier() {
-		return caissier;
-	}
+    @Override
+    public String toString() {
+        return "Vente n°" + numeroVente + " - " + date + " [" + String.format("%.2f", calculerTotal()) + " €]";
+    }
 
-	public ArrayList<Produit> getPanier() {
-		return panier;
-	}
-	
-	
+    // Getters
+    public int getNumeroVente()       { return numeroVente; }
+    public Date getDate()             { return date; }
+    public Client getClient()         { return client; }
+    public Caissier getCaissier()     { return caissier; }
+    public ArrayList<Produit> getPanier() { return panier; }
+    public boolean isValidee()        { return validee; }
 
-	
+    // Setter pour associer un client après démarrage de la vente
+    public void setClient(Client pClient) { this.client = pClient; }
 }
+

@@ -6,78 +6,84 @@ public class Rayon {
 
     // _____==== EXERCICE 4 : GESTION DES RAYONS DU SUPERMARCHÉ ====_____
 
-    // Attributs 
+    // Attributs
     private int codeRayon;
-	private String nomRayon;
+    private String nomRayon;
     private ChefRayon responsable;
-    private ArrayList <Produit> listeProduits;
-
-    // Méthodes 
+    private ArrayList<Produit> listeProduits;
 
     // Constructeur d'initialisation
-    public Rayon(int pCodeRayon, String pNomRayon, ChefRayon pResponsable, ArrayList<Produit> pListeProduits) {
-    	super();
-    	codeRayon = pCodeRayon;
-    	nomRayon = pNomRayon;
-    	responsable = pResponsable;
-    	listeProduits = pListeProduits;
-    }
-    
-    // Ajout de produit au rayon
-    public void ajouterProduit(Produit produit){
-        listeProduits.add(produit);
-    }
-        
-    // Retrait de produit du rayon
-    public void retirerProduit(Produit produit){
-        listeProduits.remove(produit);
+    public Rayon(int pCodeRayon, String pNomRayon, ChefRayon pResponsable) {
+        codeRayon     = pCodeRayon;
+        nomRayon      = pNomRayon;
+        responsable   = pResponsable;
+        listeProduits = new ArrayList<>();
     }
 
-    // Rechercher un produit dans le rayon
-    public Produit rechercheProduit(Produit produitCherche){
+    // Ajout de produit au rayon
+    public void ajouterProduit(Produit produit) {
+        if (!listeProduits.contains(produit)) {
+            listeProduits.add(produit);
+        } else {
+            System.out.println("Ce produit est déjà dans le rayon.");
+        }
+    }
+
+    // Retrait de produit du rayon
+    public void retirerProduit(Produit produit) {
+        if (listeProduits.contains(produit)) {
+            listeProduits.remove(produit);
+        } else {
+            System.out.println("Produit non trouvé dans ce rayon.");
+        }
+    }
+
+    // Rechercher un produit par référence dans le rayon
+    public Produit rechercherProduit(int reference) {
         for (Produit produit : listeProduits) {
-            if (produit == produitCherche) {
-                break;
+            if (produit.getReference() == reference) {
+                return produit;
             }
         }
-        return produitCherche;
-        
+        return null; // Non trouvé
     }
 
-    // Afficher les produits présents dans un rayon
-    public void afficherProduit(){
+    // Afficher les produits du rayon
+    public void afficherProduits() {
+        System.out.println("=== Rayon : " + nomRayon + " (Responsable : "
+                + responsable.getPrenom() + " " + responsable.getNom() + ") ===");
+        if (listeProduits.isEmpty()) {
+            System.out.println("  Aucun produit dans ce rayon.");
+            return;
+        }
         for (Produit produit : listeProduits) {
-            
-            System.out.println("Produit :" + produit.getDesignation() + " Stock :" + produit.getQuantiteStock() + " prix:" + produit.getPrixVente());
+            System.out.println("  - " + produit.getDesignation()
+                    + " | Stock : " + produit.getQuantiteStock()
+                    + " | Prix : " + produit.getPrixVente() + " €");
         }
     }
 
     // Calcul de la valeur totale du stock dans le rayon
-    public double calculValeurStock(){
+    public double calculValeurStock() {
         double valeurStock = 0.0;
         for (Produit produit : listeProduits) {
-            valeurStock = valeurStock + produit.getPrixVente()*produit.getQuantiteStock();
+            valeurStock += produit.getPrixVente() * produit.getQuantiteStock();
         }
         return valeurStock;
     }
 
-    //Getters
-    
-	public int getCodeRayon() {
-		return codeRayon;
-	}
+    @Override
+    public String toString() {
+        return nomRayon + " (Code: " + codeRayon + ", " + listeProduits.size() + " produits)";
+    }
 
-	public String getNomRayon() {
-		return nomRayon;
-	}
+    // Getters
+    public int getCodeRayon()                    { return codeRayon; }
+    public String getNomRayon()                  { return nomRayon; }
+    public ChefRayon getResponsable()            { return responsable; }
+    public ArrayList<Produit> getListeProduits() { return listeProduits; }
 
-	public ChefRayon getResponsable() {
-		return responsable;
-	}
-
-	public ArrayList<Produit> getListeProduits() {
-		return listeProduits;
-	}
-    
-    
+    // Setters
+    public void setResponsable(ChefRayon responsable) { this.responsable = responsable; }
+    public void setNomRayon(String nomRayon)          { this.nomRayon = nomRayon; }
 }

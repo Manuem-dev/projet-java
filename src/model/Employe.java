@@ -9,51 +9,52 @@ public class Employe {
     private String nom;
     private String prenom;
     private double salaire;
-
-    // Méthodes
+    private String role; // Caissier, ChefRayon, Directeur, Comptable, Magasinier
 
     // Constructeur d'initialisation
     public Employe(int pMatricule, String pNom, String pPrenom, double pSalaire) {
-    	matricule = pMatricule;
-    	nom = pNom;
-    	prenom = pPrenom;
-    	salaire = pSalaire;
+        matricule = pMatricule;
+        nom = pNom;
+        prenom = pPrenom;
+        salaire = pSalaire;
+        role = "Employe";
     }
 
     // Affichage des infos sur l'employé
-    public void afficherInformations(){
-        System.out.println("Employé : " + prenom + " " + nom + " Matricule : " + matricule + " Salaire : " + salaire);
+    public void afficherInformations() {
+        System.out.println("Employé : " + prenom + " " + nom
+                + " | Matricule : " + matricule
+                + " | Rôle : " + role
+                + " | Salaire : " + salaire + " €");
     }
 
-    // Calcul de salaire avec prime 
-    public double calculerPrime(double pPrime){
-        salaire = salaire + pPrime;
+    // Calcul de salaire avec prime
+    public double calculerPrime(double pPrime) {
+        if (pPrime > 0) {
+            salaire = salaire + pPrime;
+        }
         return salaire;
     }
 
-    // Affichage du rôle de l'employé ( à revoir )
-    public void afficherRole(String pRole){
-        System.out.println("Role : " + pRole + " pour l'employé : " + prenom + " " + nom + " matricule : " + matricule );
+    // Affichage du rôle de l'employé
+    public void afficherRole() {
+        System.out.println("Rôle : " + role + " | Employé : " + prenom + " " + nom + " | Matricule : " + matricule);
+    }
+
+    // toString
+    @Override
+    public String toString() {
+        return prenom + " " + nom + " (Matricule: " + matricule + ", Rôle: " + role + ", Salaire: " + salaire + " €)";
     }
 
     // Getters
-    
-	public int getMatricule() {
-		return matricule;
-	}
+    public int getMatricule() { return matricule; }
+    public String getNom()    { return nom; }
+    public String getPrenom() { return prenom; }
+    public double getSalaire(){ return salaire; }
+    public String getRole()   { return role; }
 
-	public String getNom() {
-		return nom;
-	}
-
-	public String getPrenom() {
-		return prenom;
-	}
-
-	public double getSalaire() {
-		return salaire;
-	}
-    
-    
-
+    // Setters
+    public void setSalaire(double salaire) { this.salaire = salaire; }
+    public void setRole(String role)       { this.role = role; }
 }

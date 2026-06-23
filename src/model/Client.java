@@ -6,72 +6,77 @@ public class Client {
 
     //_____==== EXERCICE 6 : GESTION DES CLIENTS ET FIDÉLITÉ ====_____
 
-    // Attributs 
+    // Attributs
     private int numeroClient;
     private String nom;
     private String telephone;
-    private int pointsFidelite = 0;
-    private ArrayList <Vente> historiqueAchats;
-
-    // Méthodes
+    private int pointsFidelite;
+    private ArrayList<Vente> historiqueAchats;
 
     // Constructeur d'initialisation
-    public Client(int pNumeroClient, String pNom, String pTelephone, int pPointsFidelite,
-    		ArrayList<Vente> pHistoriqueAchats) {
-
-    	numeroClient = pNumeroClient;
-    	nom = pNom;
-    	telephone = pTelephone;
-    	pointsFidelite = pPointsFidelite;
-    	historiqueAchats = pHistoriqueAchats;
+    public Client(int pNumeroClient, String pNom, String pTelephone) {
+        numeroClient     = pNumeroClient;
+        nom              = pNom;
+        telephone        = pTelephone;
+        pointsFidelite   = 0;
+        historiqueAchats = new ArrayList<>();
     }
-    
 
-    
-
-    // Ajout de points de fidélité
-    public void ajouterPoint(int pPointsFidelite){
-        if (pPointsFidelite>0) {
-            pointsFidelite = pointsFidelite + pPointsFidelite;
-        } else {
-            System.out.println("Valeur entrée invalide");
+    // Ajout de points de fidélité (1 point par euro dépensé, par exemple)
+    public void ajouterPoints(double montantAchat) {
+        int pointsGagnes = (int) montantAchat; // 1 point = 1 €
+        if (pointsGagnes > 0) {
+            pointsFidelite += pointsGagnes;
+            System.out.println("+" + pointsGagnes + " points de fidélité ajoutés. Total : " + pointsFidelite + " pts");
         }
-        
     }
 
-    // Historique d'achat
-    public void consulterHistorique(){
-        
+    // Consulter l'historique des achats
+    public void consulterHistorique() {
+        System.out.println("=== HISTORIQUE D'ACHATS de " + nom + " ===");
+        if (historiqueAchats.isEmpty()) {
+            System.out.println("Aucun achat enregistré.");
+            return;
+        }
+        double totalDepense = 0.0;
+        for (Vente vente : historiqueAchats) {
+            double montant = vente.calculerTotal();
+            totalDepense += montant;
+            System.out.println("  Vente n°" + vente.getNumeroVente()
+                    + " | Date : " + vente.getDate()
+                    + " | Montant : " + String.format("%.2f", montant) + " €");
+        }
+        System.out.println("Total dépensé : " + String.format("%.2f", totalDepense) + " €");
+        System.out.println("Points de fidélité : " + pointsFidelite + " pts");
     }
 
-	// Affichage du client
-	public void afficherClient() {
-		System.out.println("Client [numeroClient=" + numeroClient + ", nom=" + nom + ", telephone=" + telephone
-				+ ", pointsFidelite=" + pointsFidelite + ", historiqueAchats=" + historiqueAchats + "]");
-	}
-	
-	// Getters
+    // Enregistrer une vente dans l'historique
+    public void ajouterVenteHistorique(Vente vente) {
+        historiqueAchats.add(vente);
+        ajouterPoints(vente.calculerTotal());
+    }
 
-	public int getNumeroClient() {
-		return numeroClient;
-	}
+    // Affichage du client
+    public void afficherClient() {
+        System.out.println("Client [n°" + numeroClient + " | Nom: " + nom
+                + " | Tél: " + telephone
+                + " | Points: " + pointsFidelite + " pts"
+                + " | Achats: " + historiqueAchats.size() + "]");
+    }
 
-	public String getNom() {
-		return nom;
-	}
+    @Override
+    public String toString() {
+        return nom + " (n°" + numeroClient + ", Tél: " + telephone + ", " + pointsFidelite + " pts)";
+    }
 
-	public String getTelephone() {
-		return telephone;
-	}
+    // Getters
+    public int getNumeroClient()            { return numeroClient; }
+    public String getNom()                  { return nom; }
+    public String getTelephone()            { return telephone; }
+    public int getPointsFidelite()          { return pointsFidelite; }
+    public ArrayList<Vente> getHistoriqueAchats() { return historiqueAchats; }
 
-	public int getPointsFidelite() {
-		return pointsFidelite;
-	}
-
-	public ArrayList<Vente> getHistoriqueAchats() {
-		return historiqueAchats;
-	}
-    
-    
-
+    // Setters
+    public void setNom(String nom)          { this.nom = nom; }
+    public void setTelephone(String telephone){ this.telephone = telephone; }
 }
