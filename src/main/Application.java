@@ -81,15 +81,17 @@ public class Application {
 
 		// ─── EXERCICE 5 : Personnel ──────────────────────────────────────
 		System.out.println("\n=== EXERCICE 5 : PERSONNEL ===");
-		Directeur directeur = new Directeur(1, "Beaumont", "Jean", 6000);
-		Caissier caissier1 = new Caissier(10, "Petit", "Marie", 2100, 1);
-		Caissier caissier2 = new Caissier(11, "Garnier", "Thomas", 2100, 2);
-		Comptable comptable = new Comptable(20, "Simon", "Nathalie", 3800);
-		Magasinier magasinier = new Magasinier(30, "Renard", "Kevin", 2400);
+		Directeur directeur = new Directeur(1, "Boga", "ABALO", 6000);
+		Caissier caissier1 = new Caissier(10, "Petit", "MAMBAFÉI", 2100, 1);
+		Caissier caissier2 = new Caissier(10, "Clément", "BATAKA", 2150, 2);
+		ChefRayon chefRayon = new ChefRayon(24, "Kouma", "ADANLÉTÉ", 2100, "Rayon 2");
+		Comptable comptable = new Comptable(20, "Simon", "N'TOUDJÉ", 3800);
+		Magasinier magasinier = new Magasinier(30, "Dada", "MINMIN", 2400);
 
 		gestionEmploye.ajouterEmploye(directeur);
 		gestionEmploye.ajouterEmploye(caissier1);
 		gestionEmploye.ajouterEmploye(caissier2);
+		gestionEmploye.ajouterEmploye(chefRayon);
 		gestionEmploye.ajouterEmploye(chefBoulangerie);
 		gestionEmploye.ajouterEmploye(chefElectro);
 		gestionEmploye.ajouterEmploye(chefFrais);
@@ -156,7 +158,7 @@ public class Application {
 		System.out.println("\n=== EXERCICE 11 : UTILISATEURS ===");
 		gestionUtil.creerUtilisateur("directeur", "dir2024", directeur);
 		gestionUtil.creerUtilisateur("caissier1", "caisse1", caissier1);
-		gestionUtil.creerUtilisateur("caissier2", "caisse2", caissier2);
+		gestionUtil.creerUtilisateur("chefRayon", "chef123", chefRayon);
 		gestionUtil.creerUtilisateur("comptable", "compta1", comptable);
 		gestionUtil.creerUtilisateur("magasinier", "stock123", magasinier);
 

@@ -164,7 +164,7 @@ public class Dashboard extends JFrame {
 		add(mainContainer, BorderLayout.CENTER);
 	}
 
-	private JPanel buildMenu(Utilisateur u) {
+	private JPanel buildMenu(Utilisateur utilisateur) {
 		JPanel menuPanel = new JPanel(new BorderLayout());
 		menuPanel.setBackground(BG);
 
@@ -177,14 +177,39 @@ public class Dashboard extends JFrame {
 		JPanel grid = new JPanel(new GridLayout(2, 3, 20, 20));
 		grid.setBackground(BG);
 		grid.setBorder(new EmptyBorder(14, 32, 32, 32));
+		
+		boolean VoirProduits = utilisateur != null && (utilisateur.verifierRole("Magasinier") || utilisateur.verifierRole("Caissier"));
+		if (VoirProduits)
+			grid.add(buildCard("📦 Produits", "Gérer le catalogue des produits", e -> showCard("PRODUITS")));
+		else
+			grid.add(buildCard("📦 Produits", "Accès réservé", null));
+		
+		boolean VoirClients = utilisateur != null && (utilisateur.verifierRole("Directeur") || utilisateur.verifierRole("Caissier"));
+		if (VoirClients)
+			grid.add(buildCard("👤 Clients", "Fidélité et historique d'achats", e -> showCard("CLIENTS")));
+		else
+			grid.add(buildCard("👤 Clients", "Accès réservé", null));
+		
+		boolean VoirStocksRayons = utilisateur != null && (utilisateur.verifierRole("Magasinier") || utilisateur.verifierRole("ChefRayon"));
+		if (VoirStocksRayons)
+			grid.add(buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS")));
+		else
+			grid.add(buildCard("🏪 Stocks & Rayons", "Accès réservé", null));
+		
+		boolean VoirCaisse = utilisateur != null && (utilisateur.verifierRole("Caissier"));
+		if (VoirCaisse)
+			grid.add(buildCard("💳 Caisse", "Effectuer et enregistrer une vente", e -> showCard("CAISSE")));
+		else
+			grid.add(buildCard("💳 Caisse", "Accès réservé", null));
+		
 
-		grid.add(buildCard("📦 Produits", "Gérer le catalogue des produits", e -> showCard("PRODUITS")));
-		grid.add(buildCard("👤 Clients", "Fidélité et historique d'achats", e -> showCard("CLIENTS")));
-		grid.add(buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS")));
-		grid.add(buildCard("💳 Caisse", "Effectuer et enregistrer une vente", e -> showCard("CAISSE")));
+		//grid.add(buildCard("📦 Produits", "Gérer le catalogue des produits", e -> showCard("PRODUITS")));
+		//grid.add(buildCard("👤 Clients", "Fidélité et historique d'achats", e -> showCard("CLIENTS")));
+		//grid.add(buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS")));
+		//grid.add(buildCard("💳 Caisse", "Effectuer et enregistrer une vente", e -> showCard("CAISSE")));
 
-		boolean canSeeTdb = u != null && (u.verifierRole("Directeur") || u.verifierRole("Comptable"));
-		if (canSeeTdb)
+		boolean voirTableauDeBord = utilisateur != null && (utilisateur.verifierRole("Directeur") || utilisateur.verifierRole("Comptable"));
+		if (voirTableauDeBord)
 			grid.add(buildCard("📊 Tableau de bord", "Statistiques et rapports", e -> {
 				refreshDashboard();
 				showCard("TABLEAU_BORD");
@@ -192,8 +217,8 @@ public class Dashboard extends JFrame {
 		else
 			grid.add(buildCard("📊 Tableau de bord", "Accès réservé", null));
 
-		boolean canSeeEmp = u != null && (u.verifierRole("Directeur") || u.verifierRole("Magasinier"));
-		if (canSeeEmp)
+		boolean VoirEmployes = utilisateur != null && (utilisateur.verifierRole("Directeur"));
+		if (VoirEmployes)
 			grid.add(buildCard("👷 Employés", "Gérer le personnel", e -> showCard("EMPLOYES")));
 		else
 			grid.add(buildCard("👷 Employés", "Accès réservé", null));
