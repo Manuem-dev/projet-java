@@ -10,89 +10,100 @@ import model.Produit;
 
 public class GestionFournisseurApprovisionnement {
 
-    // _____==== EXERCICE 2 : GESTION FOURNISSEURS ET APPROVISIONNEMENT ====_____
+	// _____==== EXERCICE 2 : GESTION FOURNISSEURS ET APPROVISIONNEMENT ====_____
 
-    private ArrayList<Fournisseur> listeFournisseurs = new ArrayList<>();
-    private ArrayList<CommandeFournisseur> listeCommandes = new ArrayList<>();
-    private int numeroCommandeAuto = 1;
+	private ArrayList<Fournisseur> listeFournisseurs = new ArrayList<>();
+	private ArrayList<CommandeFournisseur> listeCommandes = new ArrayList<>();
+	private int numeroCommandeAuto = 1;
 
-    // ==================== FOURNISSEURS ====================
+	// ==================== FOURNISSEURS ====================
 
-    public void ajouterFournisseur(String code, String nom, String telephone, String adresse) {
-        if (rechercherFournisseur(code) != null) {
-            System.out.println("Fournisseur avec le code " + code + " déjà existant.");
-            return;
-        }
-        listeFournisseurs.add(new Fournisseur(code, nom, telephone, adresse));
-        System.out.println("Fournisseur ajouté : " + nom);
-    }
+	public void ajouterFournisseur(String code, String nom, String telephone, String adresse) {
+		if (rechercherFournisseur(code) != null) {
+			System.out.println("Fournisseur avec le code " + code + " déjà existant.");
+			return;
+		}
+		listeFournisseurs.add(new Fournisseur(code, nom, telephone, adresse));
+		System.out.println("Fournisseur ajouté : " + nom);
+	}
 
-    public Fournisseur rechercherFournisseur(String code) {
-        for (Fournisseur f : listeFournisseurs) {
-            if (f.getCode().equalsIgnoreCase(code)) return f;
-        }
-        return null;
-    }
+	public Fournisseur rechercherFournisseur(String code) {
+		for (Fournisseur fournisseur : listeFournisseurs) {
+			if (fournisseur.getCode().equalsIgnoreCase(code))
+				return fournisseur;
+		}
+		return null;
+	}
 
-    public boolean supprimerFournisseur(String code) {
-        Fournisseur f = rechercherFournisseur(code);
-        if (f != null) {
-            listeFournisseurs.remove(f);
-            System.out.println("Fournisseur supprimé : " + f.getNom());
-            return true;
-        }
-        System.out.println("Fournisseur introuvable : " + code);
-        return false;
-    }
+	public boolean supprimerFournisseur(String code) {
+		Fournisseur fournisseur = rechercherFournisseur(code);
+		if (fournisseur != null) {
+			listeFournisseurs.remove(fournisseur);
+			System.out.println("Fournisseur supprimé : " + fournisseur.getNom());
+			return true;
+		}
+		System.out.println("Fournisseur introuvable : " + code);
+		return false;
+	}
 
-    // ==================== COMMANDES ====================
+	// ==================== COMMANDES ====================
 
-    public CommandeFournisseur creerCommande(String codeFournisseur, ArrayList<Produit> produits) {
-        Fournisseur f = rechercherFournisseur(codeFournisseur);
-        if (f == null) {
-            System.out.println("Fournisseur introuvable : " + codeFournisseur);
-            return null;
-        }
-        CommandeFournisseur cmd = new CommandeFournisseur(numeroCommandeAuto++, new Date(), f, produits);
-        listeCommandes.add(cmd);
-        System.out.println("Commande n°" + cmd.getNumeroCommande() + " créée pour " + f.getNom());
-        return cmd;
-    }
+	public CommandeFournisseur creerCommande(String codeFournisseur, ArrayList<Produit> produits) {
+		Fournisseur fournisseur = rechercherFournisseur(codeFournisseur);
+		if (fournisseur == null) {
+			System.out.println("Fournisseur introuvable : " + codeFournisseur);
+			return null;
+		}
+		CommandeFournisseur commande = new CommandeFournisseur(numeroCommandeAuto++, new Date(), fournisseur, produits);
+		listeCommandes.add(commande);
+		System.out.println("Commande n°" + commande.getNumeroCommande() + " créée pour " + fournisseur.getNom());
+		return commande;
+	}
 
-    public void validerCommande(int numeroCommande) {
-        CommandeFournisseur cmd = rechercherCommande(numeroCommande);
-        if (cmd != null) cmd.validerCommande();
-        else System.out.println("Commande introuvable : " + numeroCommande);
-    }
+	public void validerCommande(int numeroCommande) {
+		CommandeFournisseur commande = rechercherCommande(numeroCommande);
+		if (commande != null)
+			commande.validerCommande();
+		else
+			System.out.println("Commande introuvable : " + numeroCommande);
+	}
 
-    public void recevoirCommande(int numeroCommande, Magasinier magasinier) {
-        CommandeFournisseur cmd = rechercherCommande(numeroCommande);
-        if (cmd == null) {
-            System.out.println("Commande introuvable : " + numeroCommande);
-            return;
-        }
-        // Incrémenter le stock de chaque produit de la commande
-        for (Produit p : cmd.getListeProduits()) {
-            magasinier.mettreAJourStock(p, p.getQuantiteStock(), true);
-        }
-        cmd.marquerLivree();
-        magasinier.receptionnerLivraison(cmd);
-    }
+	public void recevoirCommande(int numeroCommande, Magasinier magasinier) {
+		CommandeFournisseur commande = rechercherCommande(numeroCommande);
+		if (commande == null) {
+			System.out.println("Commande introuvable : " + numeroCommande);
+			return;
+		}
+		// ça c'est pour incrémenter le stock de chaque produit de la commande
+		for (Produit produit : commande.getListeProduits()) {
+			magasinier.mettreAJourStock(produit, produit.getQuantiteStock(), true);
+		}
+		commande.marquerLivree();
+		magasinier.receptionnerLivraison(commande);
+	}
 
-    public void annulerCommande(int numeroCommande) {
-        CommandeFournisseur cmd = rechercherCommande(numeroCommande);
-        if (cmd != null) cmd.annulerCommande();
-        else System.out.println("Commande introuvable : " + numeroCommande);
-    }
+	public void annulerCommande(int numeroCommande) {
+		CommandeFournisseur commande = rechercherCommande(numeroCommande);
+		if (commande != null)
+			commande.annulerCommande();
+		else
+			System.out.println("Commande introuvable : " + numeroCommande);
+	}
 
-    public CommandeFournisseur rechercherCommande(int numeroCommande) {
-        for (CommandeFournisseur c : listeCommandes) {
-            if (c.getNumeroCommande() == numeroCommande) return c;
-        }
-        return null;
-    }
+	public CommandeFournisseur rechercherCommande(int numeroCommande) {
+		for (CommandeFournisseur commande : listeCommandes) {
+			if (commande.getNumeroCommande() == numeroCommande)
+				return commande;
+		}
+		return null;
+	}
 
-    // Getters
-    public ArrayList<Fournisseur> getListeFournisseurs()           { return listeFournisseurs; }
-    public ArrayList<CommandeFournisseur> getListeCommandes()      { return listeCommandes; }
+	// Getters
+	public ArrayList<Fournisseur> getListeFournisseurs() {
+		return listeFournisseurs;
+	}
+
+	public ArrayList<CommandeFournisseur> getListeCommandes() {
+		return listeCommandes;
+	}
 }

@@ -2,23 +2,23 @@ package model;
 
 public class ProduitElectronique extends Produit {
 
-    // _____==== EXERCICE 1 : GESTION DES PRODUITS ====_____
+	// _____==== EXERCICE 1 : GESTION DES PRODUITS ====_____
 
-    // Attributs
-    private String marque;
-    private int garantie; // Ici on suppose la garantie comme le nombre de mois de garantie
+	// Attributs
+	private String marque;
+	private int garantie; // Ici on suppose la garantie comme le nombre de mois de garantie
 
-    // Méthodes
+	// Méthodes
 
-    // Constructeur d'initialisation
+	// Constructeur d'initialisation
 	public ProduitElectronique(int pReference, int pQuantiteStock, double pPrixAchat, double pPrixVente,
-			String pDesignation,String pMarque,int pGarantie) {
+			String pDesignation, String pMarque, int pGarantie) {
 		super(pReference, pQuantiteStock, pPrixAchat, pPrixVente, pDesignation);
-        marque = pMarque;
-        garantie = pGarantie;
-		
+		marque = pMarque;
+		garantie = pGarantie;
+
 	}
-	
+
 	// Getters
 
 	public String getMarque() {
@@ -28,9 +28,9 @@ public class ProduitElectronique extends Produit {
 	public int getGarantie() {
 		return garantie;
 	}
-	
+
 	// Stters
-	
+
 	public void setMarque(String marque) {
 		this.marque = marque;
 	}
@@ -38,7 +38,5 @@ public class ProduitElectronique extends Produit {
 	public void setGarantie(int garantie) {
 		this.garantie = garantie;
 	}
-	
-	
 
 }

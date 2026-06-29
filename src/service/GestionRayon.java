@@ -7,60 +7,63 @@ import model.Rayon;
 
 public class GestionRayon {
 
-    // _____==== EXERCICE 4 : GESTION DES RAYONS ====_____
+	// _____==== EXERCICE 4 : GESTION DES RAYONS ====_____
 
-    private ArrayList<Rayon> listeRayons = new ArrayList<>();
-    private int codeRayonAuto = 1;
+	private ArrayList<Rayon> listeRayons = new ArrayList<>();
+	private int codeRayonAuto = 1;
 
-    // Ajouter un rayon
-    public Rayon ajouterRayon(String nomRayon, ChefRayon responsable) {
-        Rayon rayon = new Rayon(codeRayonAuto++, nomRayon, responsable);
-        listeRayons.add(rayon);
-        System.out.println("Rayon ajouté : " + nomRayon + " (Responsable : "
-                + responsable.getPrenom() + " " + responsable.getNom() + ")");
-        return rayon;
-    }
+	// Ajouter un rayon
+	public Rayon ajouterRayon(String nomRayon, ChefRayon responsable) {
+		Rayon rayon = new Rayon(codeRayonAuto++, nomRayon, responsable);
+		listeRayons.add(rayon);
+		System.out.println("Rayon ajouté : " + nomRayon + " (Responsable : " + responsable.getPrenom() + " "
+				+ responsable.getNom() + ")");
+		return rayon;
+	}
 
-    // Supprimer un rayon
-    public boolean supprimerRayon(int codeRayon) {
-        Rayon r = rechercherRayon(codeRayon);
-        if (r != null) {
-            listeRayons.remove(r);
-            System.out.println("Rayon supprimé : " + r.getNomRayon());
-            return true;
-        }
-        System.out.println("Rayon introuvable (code: " + codeRayon + ")");
-        return false;
-    }
+	// Supprimer un rayonayon
+	public boolean supprimerRayon(int codeRayon) {
+		Rayon rayon = rechercherRayon(codeRayon);
+		if (rayon != null) {
+			listeRayons.remove(rayon);
+			System.out.println("Rayon supprimé : " + rayon.getNomRayon());
+			return true;
+		}
+		System.out.println("Rayon introuvable (code: " + codeRayon + ")");
+		return false;
+	}
 
-    // Rechercher un rayon par code
-    public Rayon rechercherRayon(int codeRayon) {
-        for (Rayon r : listeRayons) {
-            if (r.getCodeRayon() == codeRayon) return r;
-        }
-        return null;
-    }
+	// Rechercher un rayon par code
+	public Rayon rechercherRayon(int codeRayon) {
+		for (Rayon rayon : listeRayons) {
+			if (rayon.getCodeRayon() == codeRayon)
+				return rayon;
+		}
+		return null;
+	}
 
-    // Ajouter un produit dans un rayon
-    public void ajouterProduitDansRayon(int codeRayon, Produit produit) {
-        Rayon r = rechercherRayon(codeRayon);
-        if (r != null) {
-            r.ajouterProduit(produit);
-            System.out.println("Produit [" + produit.getDesignation() + "] ajouté au rayon : " + r.getNomRayon());
-        } else {
-            System.out.println("Rayon introuvable (code: " + codeRayon + ")");
-        }
-    }
+	// Ajouter un produit dans un rayon
+	public void ajouterProduitDansRayon(int codeRayon, Produit produit) {
+		Rayon rayon = rechercherRayon(codeRayon);
+		if (rayon != null) {
+			rayon.ajouterProduit(produit);
+			System.out.println("Produit [" + produit.getDesignation() + "] ajouté au rayon : " + rayon.getNomRayon());
+		} else {
+			System.out.println("Rayon introuvable (code: " + codeRayon + ")");
+		}
+	}
 
-    // Afficher tous les rayons
-    public void afficherTousLesRayons() {
-        System.out.println("=== RAYONS DU SUPERMARCHÉ (" + listeRayons.size() + ") ===");
-        for (Rayon r : listeRayons) {
-            System.out.println("  " + r.toString()
-                    + " | Valeur stock : " + String.format("%.2f", r.calculValeurStock()) + " €");
-        }
-    }
+	// Afficher tous les rayons
+	public void afficherTousLesRayons() {
+		System.out.println("=== RAYONS DU SUPERMARCHÉ (" + listeRayons.size() + ") ===");
+		for (Rayon rayon : listeRayons) {
+			System.out.println(
+					"  " + rayon.toString() + " | Valeur stock : " + String.format("%.2f", rayon.calculValeurStock()) + " €");
+		}
+	}
 
-    // Getter
-    public ArrayList<Rayon> getListeRayons() { return listeRayons; }
+	// Getter
+	public ArrayList<Rayon> getListeRayons() {
+		return listeRayons;
+	}
 }
