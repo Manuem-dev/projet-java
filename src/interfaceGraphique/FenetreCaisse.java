@@ -320,13 +320,18 @@ public class FenetreCaisse extends JPanel {
 		try {
 			int ref = Integer.parseInt(tfRef.getText().trim());
 			int qte = Integer.parseInt(tfQte.getText().trim());
-			Produit p = gestionProduit.rechercherProduit(ref);
-			if (p == null) {
+			Produit produit = gestionProduit.rechercherProduit(ref);
+			if (produit == null) {
 				JOptionPane.showMessageDialog(this, "Produit réf. " + ref + " introuvable.", "Erreur",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			gestionCaisseVente.ajouterProduitVente(venteEnCours, p, qte);
+			if (qte > produit.getQuantiteStock()) {
+				JOptionPane.showMessageDialog(this, "Stock insuffisant,vous ne pouvez pas ajouter la quantité demandée", "Erreur",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			gestionCaisseVente.ajouterProduitVente(venteEnCours, produit, qte);
 			refreshPanier();
 		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(this, "Référence ou quantité invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -340,9 +345,9 @@ public class FenetreCaisse extends JPanel {
 		if (row < 0)
 			return;
 		int ref = (int) tableModel.getValueAt(row, 0);
-		Produit p = gestionProduit.rechercherProduit(ref);
-		if (p != null) {
-			gestionCaisseVente.retirerProduitVente(venteEnCours, p);
+		Produit produit = gestionProduit.rechercherProduit(ref);
+		if (produit != null) {
+			gestionCaisseVente.retirerProduitVente(venteEnCours, produit);
 			refreshPanier();
 		}
 	}

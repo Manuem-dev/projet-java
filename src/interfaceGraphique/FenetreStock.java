@@ -87,12 +87,16 @@ public class FenetreStock extends JPanel {
 		JTextField tfMatResp = new JTextField(6);
 		g.gridx = 0;
 		g.gridy = 0;
-		formRayon.add(new JLabel("Nom rayon :"), g);
+		JLabel lblNomRayon = new JLabel("Nom rayon :");
+		lblNomRayon.setForeground(new Color(0x212121));
+		formRayon.add(lblNomRayon, g);
 		g.gridx = 1;
 		formRayon.add(tfNomRayon, g);
 		g.gridx = 0;
 		g.gridy = 1;
-		formRayon.add(new JLabel("Matricule chef :"), g);
+		JLabel lblMatricule = new JLabel("Matricule chef :");
+		lblMatricule.setForeground(new Color(0x212121));
+		formRayon.add(lblMatricule, g);
 		g.gridx = 1;
 		formRayon.add(tfMatResp, g);
 		g.gridx = 0;
@@ -140,11 +144,11 @@ public class FenetreStock extends JPanel {
 				super.getTableCellRendererComponent(t, v, sel, foc, r, c);
 				String alerte = (String) tableModelProduits.getValueAt(r, 4);
 				if ("⚠️ Stock faible".equals(alerte))
-					setBackground(new Color(0xFFF9C4));
+					setBackground(new Color(0xFFD3C4));
 				else if ("🔴 Rupture".equals(alerte))
-					setBackground(new Color(0xFFCDD2));
+					setBackground(new Color(0xFF7A86));
 				else
-					setBackground(Color.WHITE);
+					setBackground(new Color(0x9BD989));
 				if (sel)
 					setBackground(new Color(0xBBDEFB));
 				return this;

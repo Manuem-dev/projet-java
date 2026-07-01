@@ -98,12 +98,16 @@ public class FenetreClient extends JPanel {
 
 		g.gridx = 0;
 		g.gridy = 0;
-		formPanel.add(new JLabel("Nom :"), g);
+		JLabel lblNom = new JLabel("Nom :");
+		lblNom.setForeground(new Color(0x212121));
+		formPanel.add(lblNom, g);
 		g.gridx = 1;
 		tfNom = new JTextField(16);
 		formPanel.add(tfNom, g);
 		g.gridx = 2;
-		formPanel.add(new JLabel("Téléphone :"), g);
+		JLabel lblTelephone = new JLabel("Téléphone :");
+		lblTelephone.setForeground(new Color(0x212121));
+		formPanel.add(lblTelephone, g);
 		g.gridx = 3;
 		tfTelephone = new JTextField(12);
 		formPanel.add(tfTelephone, g);

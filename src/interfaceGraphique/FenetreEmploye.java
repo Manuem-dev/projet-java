@@ -83,12 +83,16 @@ public class FenetreEmploye extends JPanel {
 
 		g.gridx = 0;
 		g.gridy = 0;
-		formPanel.add(new JLabel("Matricule :"), g);
+		JLabel lblMatricule = new JLabel("Matricule :");
+		lblMatricule.setForeground(new Color(0x212121));
+		formPanel.add(lblMatricule, g);
 		g.gridx = 1;
 		tfMatricule = new JTextField(6);
 		formPanel.add(tfMatricule, g);
 		g.gridx = 2;
-		formPanel.add(new JLabel("Rôle :"), g);
+		JLabel lblRole = new JLabel("Rôle :");
+		lblRole.setForeground(new Color(0x212121));
+		formPanel.add(lblRole, g);
 		g.gridx = 3;
 		cbRole = new JComboBox<>(new String[] { "Caissier", "ChefRayon", "Directeur", "Comptable", "Magasinier" });
 		cbRole.setFont(FONT_LBL);
@@ -96,24 +100,32 @@ public class FenetreEmploye extends JPanel {
 
 		g.gridx = 0;
 		g.gridy = 1;
-		formPanel.add(new JLabel("Prénom :"), g);
+		JLabel lblPrenom = new JLabel("Prénom :");
+		lblPrenom.setForeground(new Color(0x212121));
+		formPanel.add(lblPrenom, g);
 		g.gridx = 1;
 		tfPrenom = new JTextField(12);
 		formPanel.add(tfPrenom, g);
 		g.gridx = 2;
-		formPanel.add(new JLabel("Nom :"), g);
+		JLabel lblNom = new JLabel("Nom :");
+		lblNom.setForeground(new Color(0x212121));
+		formPanel.add(lblNom, g);
 		g.gridx = 3;
 		tfNom = new JTextField(12);
 		formPanel.add(tfNom, g);
 
 		g.gridx = 0;
 		g.gridy = 2;
-		formPanel.add(new JLabel("Salaire (€) :"), g);
+		JLabel lblSalaire = new JLabel("Salaire (€) :");
+		lblSalaire.setForeground(new Color(0x212121));
+		formPanel.add(lblSalaire, g);
 		g.gridx = 1;
 		tfSalaire = new JTextField(8);
 		formPanel.add(tfSalaire, g);
 		g.gridx = 2;
-		formPanel.add(new JLabel("Info extra :"), g);
+		JLabel lblExtra = new JLabel("Info extra :");
+		lblExtra.setForeground(new Color(0x212121));
+		formPanel.add(lblExtra, g);
 		g.gridx = 3;
 		tfExtra = new JTextField(14);
 		formPanel.add(tfExtra, g);

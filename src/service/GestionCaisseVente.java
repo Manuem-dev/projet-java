@@ -30,6 +30,14 @@ public class GestionCaisseVente {
 
 	// Ajouter un produit au panier
 	public void ajouterProduitVente(Vente vente, Produit produit, int quantite) {
+		if(vente.isValidee()){
+			System.out.println("Vente déjà validée, impossible de modifier le panier.");
+			return;
+		}
+		if(produit.getQuantiteStock() < quantite){
+			System.out.println("Stock insuffisant,vous ne pouvez pas ajouter la quantité demandée");
+			return;
+		}
 		for (int i = 0; i < quantite; i++) {
 			vente.ajouterProduit(produit);
 		}
@@ -37,6 +45,10 @@ public class GestionCaisseVente {
 
 	// Retirer un produit du panier
 	public void retirerProduitVente(Vente vente, Produit produit) {
+		if(vente.isValidee()){
+			System.out.println("Vente déjà validée, impossible de modifier le panier.");
+			return;
+		}
 		while (vente.getPanier().contains(produit)) {
 			vente.supprimerProduit(produit);
 		}
