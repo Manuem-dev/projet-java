@@ -225,10 +225,13 @@ public class FenetreStock extends JPanel {
 			return;
 		try {
 			int qte = Integer.parseInt(input.trim());
-			if (entree)
+			if (entree && qte > 0) {
 				p.ajouterStock(qte);
-			else
+			} else if (!entree && qte < p.getQuantiteStock() && qte > 0) {
 				p.retirerStock(qte);
+			} else {
+				JOptionPane.showMessageDialog(this, "Erreur : quantité invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
 			refreshTables();
 		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(this, "Valeur invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
