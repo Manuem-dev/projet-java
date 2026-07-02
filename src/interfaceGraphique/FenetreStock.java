@@ -5,10 +5,11 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+
 
 import service.GestionProduit;
 import service.GestionRayon;
+import service.GestionUtilisateur;
 import model.*;
 
 /**
@@ -25,15 +26,17 @@ public class FenetreStock extends JPanel {
 
 	private GestionProduit gestionProduit;
 	private GestionRayon gestionRayon;
+	private GestionUtilisateur gestionUtilisateur;
 
 	private DefaultTableModel tableModelProduits;
 	private DefaultTableModel tableModelRayons;
 	private JTable tableProduits;
 	private JTable tableRayons;
 
-	public FenetreStock(GestionProduit pGestionProduit, GestionRayon pGestionRayon) {
+	public FenetreStock(GestionProduit pGestionProduit, GestionRayon pGestionRayon, GestionUtilisateur pGestionUtilisateur) {
 		gestionProduit = pGestionProduit;
 		gestionRayon = pGestionRayon;
+		gestionUtilisateur = pGestionUtilisateur;
 		this.setBackground(BG);
 		setLayout(new BorderLayout(10, 10));
 		buildUI();
@@ -103,20 +106,23 @@ public class FenetreStock extends JPanel {
 		g.gridy = 2;
 		g.gridwidth = 2;
 		JButton btnAddRayon = blueButton("➕ Créer rayon");
-		btnAddRayon.addActionListener(e -> {
-			String nom = tfNomRayon.getText().trim();
-			if (nom.isEmpty())
-				return;
-			// Chef rayon simplifié pour la démo
-			ChefRayon chef = new ChefRayon(1, "Chef", nom, 3000, nom);
-			gestionRayon.ajouterRayon(nom, chef);
-			refreshTables();
-			tfNomRayon.setText("");
-			tfMatResp.setText("");
-		});
-		formRayon.add(btnAddRayon, g);
-		panelRayons.add(formRayon, BorderLayout.SOUTH);
+		if (gestionUtilisateur.verifierAcces("Directeur")) {
+			btnAddRayon.addActionListener(e -> {
+				String nom = tfNomRayon.getText().trim();
+				if (nom.isEmpty())
+					return;
+				ChefRayon chef = new ChefRayon(1, "Chef", nom, 3000, nom);
+				gestionRayon.ajouterRayon(nom, chef);
+				refreshTables();
+				tfNomRayon.setText("");
+				tfMatResp.setText("");
+			});
+			formRayon.add(btnAddRayon, g);
+			panelRayons.add(formRayon, BorderLayout.SOUTH);
+		}
+		
 		split.setLeftComponent(panelRayons);
+		
 
 		// ── Produits / Stock ──────────────────────────────────────────────
 		JPanel panelProduits = new JPanel(new BorderLayout(6, 6));
@@ -144,7 +150,7 @@ public class FenetreStock extends JPanel {
 				super.getTableCellRendererComponent(t, v, sel, foc, r, c);
 				String alerte = (String) tableModelProduits.getValueAt(r, 4);
 				if ("⚠️ Stock faible".equals(alerte))
-					setBackground(new Color(0xFFD3C4));
+					setBackground(new Color(0xACAD61));
 				else if ("🔴 Rupture".equals(alerte))
 					setBackground(new Color(0xFF7A86));
 				else
@@ -227,7 +233,7 @@ public class FenetreStock extends JPanel {
 			int qte = Integer.parseInt(input.trim());
 			if (entree && qte > 0) {
 				p.ajouterStock(qte);
-			} else if (!entree && qte < p.getQuantiteStock() && qte > 0) {
+			} else if (!entree && qte <= p.getQuantiteStock() && qte > 0) {
 				p.retirerStock(qte);
 			} else {
 				JOptionPane.showMessageDialog(this, "Erreur : quantité invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);

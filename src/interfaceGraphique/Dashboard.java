@@ -16,39 +16,39 @@ import model.*;
 public class Dashboard extends JFrame {
 
 	// ── Design tokens ─────────────────────────────────────────────────────────
-	private static final Color BG = new Color(0xF5F5F5);
-	private static final Color PRIMARY = new Color(0x1565C0);
-	private static final Color ACCENT = new Color(0x0D47A1);
-	private static final Color CARD_BG = Color.WHITE;
+	private static final Color BG       = new Color(0xF5F5F5);
+	private static final Color PRIMARY  = new Color(0x1565C0);
+	private static final Color ACCENT   = new Color(0x0D47A1);
+	private static final Color CARD_BG  = Color.WHITE;
 	private static final Color TEXT_SUB = new Color(0x757575);
-	private static final Color GREEN = new Color(0x2E7D32);
-	private static final Color RED_CLR = new Color(0xC62828);
-	private static final Font FONT_TTL = new Font("Segoe UI", Font.BOLD, 18);
-	private static final Font FONT_LBL = new Font("Segoe UI", Font.PLAIN, 13);
-	private static final Font FONT_CARD = new Font("Segoe UI", Font.BOLD, 14);
+	private static final Color GREEN    = new Color(0x2E7D32);
+	private static final Color RED_CLR  = new Color(0xC62828);
+	private static final Font  FONT_TTL  = new Font("Segoe UI", Font.BOLD,  18);
+	private static final Font  FONT_LBL  = new Font("Segoe UI", Font.PLAIN, 13);
+	private static final Font  FONT_CARD = new Font("Segoe UI", Font.BOLD,  14);
 
-	private GestionUtilisateur gestionUtilisateur;
-	private GestionProduit gestionProduit;
-	private GestionEmploye gestionEmploye;
-	private GestionClient gestionClient;
-	private GestionRayon gestionRayon;
-	private GestionCaisseVente gestionCaisseVente;
-	private GestionFacture gestionFacture;
+	private GestionUtilisateur   gestionUtilisateur;
+	private GestionProduit       gestionProduit;
+	private GestionEmploye       gestionEmploye;
+	private GestionClient        gestionClient;
+	private GestionRayon         gestionRayon;
+	private GestionCaisseVente   gestionCaisseVente;
+	private GestionFacture       gestionFacture;
 
 	private CardLayout cardLayout;
-	private JPanel mainContainer;
-	private JButton btnRetour;
+	private JPanel     mainContainer;
+	private JButton    btnRetour;
 
 	public Dashboard(GestionUtilisateur gestionUtilisateur, GestionProduit gestionProduit,
 			GestionEmploye gestionEmploye, GestionClient gestionClient, GestionRayon gestionRayon,
 			GestionCaisseVente gestionCaisseVente, GestionFacture gestionFacture) {
 		this.gestionUtilisateur = gestionUtilisateur;
-		this.gestionProduit = gestionProduit;
-		this.gestionEmploye = gestionEmploye;
-		this.gestionClient = gestionClient;
-		this.gestionRayon = gestionRayon;
+		this.gestionProduit     = gestionProduit;
+		this.gestionEmploye     = gestionEmploye;
+		this.gestionClient      = gestionClient;
+		this.gestionRayon       = gestionRayon;
 		this.gestionCaisseVente = gestionCaisseVente;
-		this.gestionFacture = gestionFacture;
+		this.gestionFacture     = gestionFacture;
 
 		Utilisateur u = gestionUtilisateur.getUtilisateurConnecte();
 		setTitle("SuperMarché — Dashboard");
@@ -61,8 +61,12 @@ public class Dashboard extends JFrame {
 		buildUI(u);
 	}
 
+	// ════════════════════════════════════════════════════════════════════════════
+	// UI principale
+	// ════════════════════════════════════════════════════════════════════════════
+
 	private void buildUI(Utilisateur u) {
-		// ── En-tête fixe ──────────────────────────────────────────────────
+		// ── En-tête fixe ──────────────────────────────────────────────────────
 		JPanel header = new JPanel(new BorderLayout());
 		header.setBackground(PRIMARY);
 		header.setBorder(new EmptyBorder(14, 24, 14, 24));
@@ -72,68 +76,22 @@ public class Dashboard extends JFrame {
 		titre.setForeground(Color.WHITE);
 		header.add(titre, BorderLayout.WEST);
 
-		String nomUser = (u != null) ? u.getEmploye().getPrenom() + " " + u.getEmploye().getNom() : "";
+		String nomUser  = (u != null) ? u.getEmploye().getPrenom() + " " + u.getEmploye().getNom() : "";
 		String roleUser = (u != null) ? u.getRole() : "";
 		JLabel userInfo = new JLabel("  " + nomUser + "  [" + roleUser + "]");
 		userInfo.setFont(FONT_LBL.deriveFont(Font.ITALIC));
 		userInfo.setForeground(new Color(0xBBDEFB));
 		header.add(userInfo, BorderLayout.CENTER);
 
-		btnRetour = new JButton("← Retour") {
-			@Override
-			protected void paintComponent(Graphics g) {
-				g.setColor(getBackground());
-				g.fillRect(0, 0, getWidth(), getHeight());
-				super.paintComponent(g);
-			}
-		};
-		btnRetour.setFont(FONT_LBL);
-		btnRetour.setBackground(ACCENT);
-		btnRetour.setForeground(Color.WHITE);
-		btnRetour.setContentAreaFilled(false);
-		btnRetour.setFocusPainted(false);
-		btnRetour.setBorderPainted(false);
-		btnRetour.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRetour = headerBtn("← Retour", ACCENT, new Color(0x283593));
 		btnRetour.setVisible(false);
-		btnRetour.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				btnRetour.setBackground(new Color(0x283593));
-			}
-
-			public void mouseExited(MouseEvent e) {
-				btnRetour.setBackground(ACCENT);
-			}
-		});
 		btnRetour.addActionListener(e -> showCard("MENU"));
 
-		JButton btnDeconnect = new JButton("Déconnexion") {
-			@Override
-			protected void paintComponent(Graphics g) {
-				g.setColor(getBackground());
-				g.fillRect(0, 0, getWidth(), getHeight());
-				super.paintComponent(g);
-			}
-		};
-		btnDeconnect.setFont(FONT_LBL);
-		btnDeconnect.setBackground(RED_CLR);
-		btnDeconnect.setForeground(Color.WHITE);
-		btnDeconnect.setContentAreaFilled(false);
-		btnDeconnect.setFocusPainted(false);
-		btnDeconnect.setBorderPainted(false);
-		btnDeconnect.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnDeconnect.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				btnDeconnect.setBackground(new Color(0xB71C1C));
-			}
-
-			public void mouseExited(MouseEvent e) {
-				btnDeconnect.setBackground(RED_CLR);
-			}
-		});
+		JButton btnDeconnect = headerBtn("Déconnexion", RED_CLR, new Color(0xB71C1C));
 		btnDeconnect.addActionListener(e -> {
 			gestionUtilisateur.deconnecter();
-			new Accueil(gestionUtilisateur, gestionProduit, gestionEmploye, gestionClient, gestionRayon,
-					gestionCaisseVente, gestionFacture).setVisible(true);
+			new Accueil(gestionUtilisateur, gestionProduit, gestionEmploye, gestionClient,
+					gestionRayon, gestionCaisseVente, gestionFacture).setVisible(true);
 			dispose();
 		});
 
@@ -144,25 +102,25 @@ public class Dashboard extends JFrame {
 		header.add(rightHeader, BorderLayout.EAST);
 		add(header, BorderLayout.NORTH);
 
-		// ── CardLayout principal ──────────────────────────────────────────
-		cardLayout = new CardLayout();
+		// ── CardLayout principal ───────────────────────────────────────────────
+		cardLayout    = new CardLayout();
 		mainContainer = new JPanel(cardLayout);
 		mainContainer.setBackground(BG);
 
-		// ── Carte MENU ───────────────────────────────────────────────────
 		mainContainer.add(buildMenu(u), "MENU");
-
-		// ── Cartes Modules (avec les vrais services peuplés) ─────────────
 		mainContainer.add(new FenetreProduit(gestionProduit), "PRODUITS");
 		mainContainer.add(new FenetreClient(gestionClient), "CLIENTS");
-		mainContainer.add(new FenetreStock(gestionProduit, gestionRayon), "RAYONS");
-		mainContainer.add(new FenetreCaisse(gestionCaisseVente, gestionProduit, gestionClient, gestionEmploye),
-				"CAISSE");
+		mainContainer.add(new FenetreStock(gestionProduit, gestionRayon, gestionUtilisateur), "RAYONS");
+		mainContainer.add(new FenetreCaisse(gestionCaisseVente, gestionProduit, gestionClient, gestionEmploye), "CAISSE");
 		mainContainer.add(new FenetreEmploye(gestionEmploye), "EMPLOYES");
 		mainContainer.add(buildDashboardPanel(), "TABLEAU_BORD");
 
 		add(mainContainer, BorderLayout.CENTER);
 	}
+
+	// ════════════════════════════════════════════════════════════════════════════
+	// Menu principal (grille de modules)
+	// ════════════════════════════════════════════════════════════════════════════
 
 	private JPanel buildMenu(Utilisateur utilisateur) {
 		JPanel menuPanel = new JPanel(new BorderLayout());
@@ -177,64 +135,63 @@ public class Dashboard extends JFrame {
 		JPanel grid = new JPanel(new GridLayout(2, 3, 20, 20));
 		grid.setBackground(BG);
 		grid.setBorder(new EmptyBorder(14, 32, 32, 32));
-		
-		boolean VoirProduits = utilisateur != null && (utilisateur.verifierRole("Directeur") ||utilisateur.verifierRole("Magasinier") || utilisateur.verifierRole("Caissier"));
-		if (VoirProduits)
-			grid.add(buildCard("📦 Produits", "Gérer le catalogue des produits", e -> showCard("PRODUITS")));
-		else
-			grid.add(buildCard("📦 Produits", "Accès réservé", null));
-		
-		boolean VoirClients = utilisateur != null && (utilisateur.verifierRole("Directeur") || utilisateur.verifierRole("Caissier"));
-		if (VoirClients)
-			grid.add(buildCard("👤 Clients", "Fidélité et historique d'achats", e -> showCard("CLIENTS")));
-		else
-			grid.add(buildCard("👤 Clients", "Accès réservé", null));
-		
-		boolean VoirStocksRayons = utilisateur != null && (utilisateur.verifierRole("Directeur") ||utilisateur.verifierRole("Magasinier") || utilisateur.verifierRole("ChefRayon"));
-		if (VoirStocksRayons)
-			grid.add(buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS")));
-		else
-			grid.add(buildCard("🏪 Stocks & Rayons", "Accès réservé", null));
-		
-		boolean VoirCaisse = utilisateur != null && (utilisateur.verifierRole("Directeur") ||utilisateur.verifierRole("Caissier"));
-		if (VoirCaisse)
-			grid.add(buildCard("💳 Caisse", "Effectuer et enregistrer une vente", e -> showCard("CAISSE")));
-		else
-			grid.add(buildCard("💳 Caisse", "Accès réservé", null));
-		
 
-		//grid.add(buildCard("📦 Produits", "Gérer le catalogue des produits", e -> showCard("PRODUITS")));
-		//grid.add(buildCard("👤 Clients", "Fidélité et historique d'achats", e -> showCard("CLIENTS")));
-		//grid.add(buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS")));
-		//grid.add(buildCard("💳 Caisse", "Effectuer et enregistrer une vente", e -> showCard("CAISSE")));
+		boolean voirProduits = role(utilisateur, "Directeur", "Magasinier", "Caissier");
+		grid.add(voirProduits
+				? buildCard("📦 Produits",      "Gérer le catalogue des produits",    e -> showCard("PRODUITS"))
+				: buildCard("📦 Produits",      "Accès réservé",                      null));
 
-		boolean voirTableauDeBord = utilisateur != null && (utilisateur.verifierRole("Directeur") || utilisateur.verifierRole("Comptable"));
-		if (voirTableauDeBord)
-			grid.add(buildCard("📊 Tableau de bord", "Statistiques et rapports", e -> {
-				refreshDashboard();
-				showCard("TABLEAU_BORD");
-			}));
-		else
-			grid.add(buildCard("📊 Tableau de bord", "Accès réservé", null));
+		boolean voirClients = role(utilisateur, "Directeur", "Caissier");
+		grid.add(voirClients
+				? buildCard("👤 Clients",       "Fidélité et historique d'achats",    e -> showCard("CLIENTS"))
+				: buildCard("👤 Clients",       "Accès réservé",                      null));
 
-		boolean VoirEmployes = utilisateur != null && (utilisateur.verifierRole("Directeur"));
-		if (VoirEmployes)
-			grid.add(buildCard("👷 Employés", "Gérer le personnel", e -> showCard("EMPLOYES")));
-		else
-			grid.add(buildCard("👷 Employés", "Accès réservé", null));
+		boolean voirRayons = role(utilisateur, "Directeur", "Magasinier", "ChefRayon");
+		grid.add(voirRayons
+				? buildCard("🏪 Stocks & Rayons", "Surveiller et ajuster les stocks", e -> showCard("RAYONS"))
+				: buildCard("🏪 Stocks & Rayons", "Accès réservé",                    null));
+
+		boolean voirCaisse = role(utilisateur, "Directeur", "Caissier");
+		grid.add(voirCaisse
+				? buildCard("💳 Caisse",        "Effectuer et enregistrer une vente", e -> showCard("CAISSE"))
+				: buildCard("💳 Caisse",        "Accès réservé",                      null));
+
+		boolean voirTDB = role(utilisateur, "Directeur", "Comptable");
+		grid.add(voirTDB
+				? buildCard("📊 Tableau de bord", "Statistiques et rapports",         e -> { refreshDashboard(); showCard("TABLEAU_BORD"); })
+				: buildCard("📊 Tableau de bord", "Accès réservé",                    null));
+
+		boolean voirEmployes = role(utilisateur, "Directeur");
+		grid.add(voirEmployes
+				? buildCard("👷 Employés",      "Gérer le personnel",                 e -> showCard("EMPLOYES"))
+				: buildCard("👷 Employés",      "Accès réservé",                      null));
 
 		menuPanel.add(grid, BorderLayout.CENTER);
 		return menuPanel;
 	}
 
-	// ── Vrai panneau Tableau de Bord ──────────────────────────────────────────
-	private JPanel tdbPanel; // référence pour rafraîchissement
-	private JLabel tdbCA, tdbVentes, tdbClients, tdbEmployes, tdbProduits, tdbAlertes;
+	/** Vérifie si l'utilisateur possède l'un des rôles indiqués. */
+	private boolean role(Utilisateur u, String... roles) {
+		if (u == null) return false;
+		for (String r : roles) if (u.verifierRole(r)) return true;
+		return false;
+	}
+
+	// ════════════════════════════════════════════════════════════════════════════
+	// Tableau de bord — panneau enrichi
+	// ════════════════════════════════════════════════════════════════════════════
+
+	private JPanel tdbPanel;
+	// Labels KPI
+	private JLabel tdbCA, tdbVentes, tdbClients, tdbEmployes, tdbProduits, tdbAlertes, tdbPerimes;
+	// Modèles pour les onglets
+	private DefaultTableModel vmVentes, vmAlertes, vmPerimes;
 
 	private JPanel buildDashboardPanel() {
 		tdbPanel = new JPanel(new BorderLayout(0, 0));
 		tdbPanel.setBackground(BG);
 
+		// ── En-tête du tableau de bord ─────────────────────────────────────────
 		JPanel tdbHeader = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tdbHeader.setBackground(PRIMARY);
 		tdbHeader.setBorder(new EmptyBorder(10, 16, 10, 16));
@@ -242,67 +199,119 @@ public class Dashboard extends JFrame {
 		tdbTitre.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		tdbTitre.setForeground(Color.WHITE);
 		tdbHeader.add(tdbTitre);
+
+		// Bouton rafraîchir
+		JButton btnRefresh = new JButton("🔄 Actualiser") {
+			@Override protected void paintComponent(Graphics g) {
+				g.setColor(getBackground()); g.fillRect(0, 0, getWidth(), getHeight());
+				super.paintComponent(g);
+			}
+		};
+		btnRefresh.setFont(FONT_LBL); btnRefresh.setForeground(Color.WHITE);
+		btnRefresh.setBackground(new Color(0x1976D2)); btnRefresh.setContentAreaFilled(false);
+		btnRefresh.setFocusPainted(false); btnRefresh.setBorderPainted(false);
+		btnRefresh.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRefresh.addActionListener(e -> refreshDashboard());
+		tdbHeader.add(btnRefresh);
 		tdbPanel.add(tdbHeader, BorderLayout.NORTH);
 
-		// Grille de KPI
-		JPanel kpiGrid = new JPanel(new GridLayout(2, 3, 16, 16));
-		kpiGrid.setBackground(BG);
-		kpiGrid.setBorder(new EmptyBorder(20, 24, 20, 24));
-
-		tdbCA = new JLabel("—");
-		tdbVentes = new JLabel("—");
-		tdbClients = new JLabel("—");
+		// ── Grille KPI (2 × 4) ────────────────────────────────────────────────
+		tdbCA       = new JLabel("—");
+		tdbVentes   = new JLabel("—");
+		tdbClients  = new JLabel("—");
 		tdbEmployes = new JLabel("—");
 		tdbProduits = new JLabel("—");
-		tdbAlertes = new JLabel("—");
+		tdbAlertes  = new JLabel("—");
+		tdbPerimes  = new JLabel("—");
 
-		kpiGrid.add(kpiCard("💰 Chiffre d'Affaires", tdbCA, new Color(0x1B5E20)));
-		kpiGrid.add(kpiCard("🧾 Ventes enregistrées", tdbVentes, PRIMARY));
-		kpiGrid.add(kpiCard("👤 Clients fidèles", tdbClients, new Color(0x4A148C)));
-		kpiGrid.add(kpiCard("👷 Employés", tdbEmployes, new Color(0xE65100)));
-		kpiGrid.add(kpiCard("📦 Produits en catalogue", tdbProduits, new Color(0x006064)));
-		kpiGrid.add(kpiCard("⚠️ Alertes stock faible", tdbAlertes, RED_CLR));
+		JPanel kpiGrid = new JPanel(new GridLayout(2, 4, 14, 14));
+		kpiGrid.setBackground(BG);
+		kpiGrid.setBorder(new EmptyBorder(16, 20, 10, 20));
+		kpiGrid.add(kpiCard("💰 Chiffre d'Affaires",    tdbCA,       new Color(0x1B5E20)));
+		kpiGrid.add(kpiCard("🧾 Ventes enregistrées",   tdbVentes,   PRIMARY));
+		kpiGrid.add(kpiCard("👤 Clients fidèles",        tdbClients,  new Color(0x4A148C)));
+		kpiGrid.add(kpiCard("👷 Employés",               tdbEmployes, new Color(0xE65100)));
+		kpiGrid.add(kpiCard("📦 Produits en catalogue",  tdbProduits, new Color(0x006064)));
+		kpiGrid.add(kpiCard("⚠️ Alertes stock faible",  tdbAlertes,  RED_CLR));
+		kpiGrid.add(kpiCard("🗓️ Produits périmés",      tdbPerimes,  new Color(0x880E4F)));
+		// Carte vide pour compléter la grille
+		JPanel placeholderCard = new JPanel();
+		placeholderCard.setBackground(BG);
+		kpiGrid.add(placeholderCard);
 
 		tdbPanel.add(kpiGrid, BorderLayout.CENTER);
 
-		// Tableau des dernières ventes
-		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.setBackground(BG);
-		bottomPanel.setBorder(new EmptyBorder(0, 24, 20, 24));
+		// ── JTabbedPane — 3 onglets détaillés ─────────────────────────────────
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.setFont(FONT_LBL.deriveFont(Font.BOLD));
+		tabs.setBackground(BG);
 
-		JLabel lblVentesTitle = new JLabel("Dernières ventes enregistrées :");
-		lblVentesTitle.setFont(FONT_CARD);
-		lblVentesTitle.setForeground(PRIMARY);
-		lblVentesTitle.setBorder(new EmptyBorder(0, 0, 8, 0));
-		bottomPanel.add(lblVentesTitle, BorderLayout.NORTH);
-
-		String[] cols = { "N° Vente", "Date", "Client", "Caissier", "Montant (€)" };
-		DefaultTableModel ventesModel = new DefaultTableModel(cols, 0) {
-			public boolean isCellEditable(int r, int c) {
-				return false;
-			}
+		// ─ Onglet 1 : Dernières ventes ─────────────────────────────────────
+		String[] colsVentes = { "N° Vente", "Date", "Client", "Caissier", "Montant (€)" };
+		vmVentes = new DefaultTableModel(colsVentes, 0) {
+			public boolean isCellEditable(int r, int c) { return false; }
 		};
-		JTable ventesTable = new JTable(ventesModel);
-		ventesTable.setFont(FONT_LBL);
-		ventesTable.setRowHeight(24);
-		ventesTable.getTableHeader().setBackground(PRIMARY);
-		ventesTable.getTableHeader().setForeground(Color.WHITE);
-		ventesTable.getTableHeader().setFont(FONT_LBL.deriveFont(Font.BOLD));
-		ventesTable.setSelectionBackground(new Color(0xBBDEFB));
-		bottomPanel.add(new JScrollPane(ventesTable), BorderLayout.CENTER);
-		tdbPanel.add(bottomPanel, BorderLayout.SOUTH);
+		tabs.addTab("📋 Dernières ventes", buildTablePanel(vmVentes, null));
 
-		// Stocker le modèle pour rafraîchissement
-		tdbPanel.putClientProperty("ventesModel", ventesModel);
+		// ─ Onglet 2 : Alertes stock ────────────────────────────────────────
+		String[] colsAlertes = { "Réf.", "Désignation", "Type", "Stock actuel", "Seuil", "Statut" };
+		vmAlertes = new DefaultTableModel(colsAlertes, 0) {
+			public boolean isCellEditable(int r, int c) { return false; }
+		};
+		JScrollPane spAlertes = buildTablePanel(vmAlertes, (t, v, sel, foc, r, c) -> {
+			String statut = (String) vmAlertes.getValueAt(r, 5);
+			Color bg = "🔴 Rupture".equals(statut) ? new Color(0xFF7A86)
+					 : "⚠️ Stock faible".equals(statut) ? new Color(0xACAD61)
+					 : Color.WHITE;
+			return new DefaultTableCellRenderer() {{
+				setBackground(sel ? new Color(0xBBDEFB) : bg);
+				setText(v == null ? "" : v.toString());
+				setFont(FONT_LBL);
+			}};
+		});
+		tabs.addTab("⚠️ Alertes stock", spAlertes);
+
+		// ─ Onglet 3 : Produits périmés ────────────────────────────────────
+		String[] colsPerimes = { "Réf.", "Désignation", "Stock", "Date péremption", "Périmé depuis" };
+		vmPerimes = new DefaultTableModel(colsPerimes, 0) {
+			public boolean isCellEditable(int r, int c) { return false; }
+		};
+		tabs.addTab("🗓️ Produits périmés", buildTablePanel(vmPerimes, null));
+
+		// Wrapper pour limiter la hauteur des onglets
+		JPanel bottomWrapper = new JPanel(new BorderLayout());
+		bottomWrapper.setBackground(new Color(0x46B3F2));
+		bottomWrapper.setBorder(new EmptyBorder(0, 20, 16, 20));
+		bottomWrapper.add(tabs, BorderLayout.CENTER);
+		tdbPanel.add(bottomWrapper, BorderLayout.SOUTH);
 
 		return tdbPanel;
 	}
 
+	/** Crée un JScrollPane contenant un JTable stylisé depuis un DefaultTableModel. */
+	private JScrollPane buildTablePanel(DefaultTableModel model,
+			TableCellRenderer renderer) {
+		JTable t = new JTable(model);
+		t.setFont(FONT_LBL);
+		t.setRowHeight(24);
+		t.getTableHeader().setBackground(PRIMARY);
+		t.getTableHeader().setForeground(Color.WHITE);
+		t.getTableHeader().setFont(FONT_LBL.deriveFont(Font.BOLD));
+		t.setSelectionBackground(new Color(0xBBDEFB));
+		t.setGridColor(new Color(0xE0E0E0));
+		if (renderer != null) t.setDefaultRenderer(Object.class, renderer);
+		JScrollPane sp = new JScrollPane(t);
+		sp.setPreferredSize(new Dimension(0, 180));
+		return sp;
+	}
+
+	/** Crée une KPI card avec titre et valeur. */
 	private JPanel kpiCard(String titre, JLabel valLabel, Color accent) {
 		JPanel card = new JPanel(new BorderLayout());
 		card.setBackground(CARD_BG);
-		card.setBorder(BorderFactory.createCompoundBorder(new LineBorder(new Color(0xE0E0E0), 1, true),
-				new EmptyBorder(16, 20, 16, 20)));
+		card.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(new Color(0xE0E0E0), 1, true),
+				new EmptyBorder(14, 18, 14, 18)));
 
 		JLabel lblTitre = new JLabel(titre);
 		lblTitre.setFont(FONT_LBL);
@@ -316,46 +325,91 @@ public class Dashboard extends JFrame {
 		return card;
 	}
 
+	// ════════════════════════════════════════════════════════════════════════════
+	// Rafraîchissement des données du tableau de bord
+	// ════════════════════════════════════════════════════════════════════════════
+
 	private void refreshDashboard() {
 		ArrayList<Vente> ventes = gestionCaisseVente.getListeVentes();
 		double ca = 0;
-		for (Vente v : ventes)
-			ca += v.calculerTotal();
+		for (Vente v : ventes) ca += v.calculerTotal();
 
+		// ── KPI ───────────────────────────────────────────────────────────────
 		tdbCA.setText(String.format("%.2f €", ca));
 		tdbVentes.setText(String.valueOf(ventes.size()));
 		tdbClients.setText(String.valueOf(gestionClient.getListeClients().size()));
 		tdbEmployes.setText(String.valueOf(gestionEmploye.getListeEmployes().size()));
 		tdbProduits.setText(String.valueOf(gestionProduit.getListeDesProduits().size()));
 
-		long alertes = gestionProduit.getListeDesProduits().stream().filter(p -> p.getQuantiteStock() <= 10).count();
+		long alertes = gestionProduit.getListeDesProduits().stream()
+				.filter(p -> p.getQuantiteStock() <= 10).count();
 		tdbAlertes.setText(String.valueOf(alertes));
 		tdbAlertes.setForeground(alertes > 0 ? RED_CLR : GREEN);
 
-		// Rafraîchir tableau ventes
-		DefaultTableModel vm = (DefaultTableModel) tdbPanel.getClientProperty("ventesModel");
-		if (vm != null) {
-			vm.setRowCount(0);
-			for (Vente v : ventes) {
-				String clientNom = v.getClient() != null ? v.getClient().getNom() : "—";
-				String caissierNom = v.getCaissier() != null
-						? v.getCaissier().getPrenom() + " " + v.getCaissier().getNom()
-						: "—";
-				vm.addRow(new Object[] { v.getNumeroVente(), v.getDate(), clientNom, caissierNom,
-						String.format("%.2f", v.calculerTotal()) });
+		ArrayList<ProduitFrais> perimes = gestionProduit.getProduitsPerimes();
+		tdbPerimes.setText(String.valueOf(perimes.size()));
+		tdbPerimes.setForeground(perimes.size() > 0 ? new Color(0x880E4F) : GREEN);
+
+		// ── Onglet 1 : Ventes ─────────────────────────────────────────────────
+		vmVentes.setRowCount(0);
+		for (Vente v : ventes) {
+			String clientNom  = v.getClient() != null ? v.getClient().getNom() : "—";
+			String caissierNom = v.getCaissier() != null
+					? v.getCaissier().getPrenom() + " " + v.getCaissier().getNom() : "—";
+			vmVentes.addRow(new Object[]{
+				v.getNumeroVente(),
+				v.getDate(),
+				clientNom,
+				caissierNom,
+				String.format("%.2f", v.calculerTotal())
+			});
+		}
+
+		// ── Onglet 2 : Alertes stock ──────────────────────────────────────────
+		vmAlertes.setRowCount(0);
+		for (Produit p : gestionProduit.getListeDesProduits()) {
+			if (p.getQuantiteStock() <= 10) {
+				String type = (p instanceof ProduitFrais)        ? "Frais"
+						     : (p instanceof ProduitElectronique) ? "Électronique" : "Artisanal";
+				String statut = p.getQuantiteStock() == 0 ? "🔴 Rupture" : "⚠️ Stock faible";
+				vmAlertes.addRow(new Object[]{
+					p.getReference(), p.getDesignation(), type,
+					p.getQuantiteStock(), 10, statut
+				});
 			}
 		}
+
+		// ── Onglet 3 : Produits périmés ───────────────────────────────────────
+		vmPerimes.setRowCount(0);
+		for (ProduitFrais pf : perimes) {
+			long jours = java.time.temporal.ChronoUnit.DAYS.between(
+					pf.getDatePeremption(), java.time.LocalDate.now());
+			vmPerimes.addRow(new Object[]{
+				pf.getReference(), pf.getDesignation(), pf.getQuantiteStock(),
+				pf.getDatePeremption(),
+				jours + " jour(s)"
+			});
+		}
 	}
+
+	// ════════════════════════════════════════════════════════════════════════════
+	// Navigation
+	// ════════════════════════════════════════════════════════════════════════════
 
 	private void showCard(String name) {
 		cardLayout.show(mainContainer, name);
 		btnRetour.setVisible(!name.equals("MENU"));
 	}
 
+	// ════════════════════════════════════════════════════════════════════════════
+	// Carte de menu (module)
+	// ════════════════════════════════════════════════════════════════════════════
+
 	private JPanel buildCard(String titre, String description, ActionListener action) {
 		JPanel card = new JPanel(new BorderLayout());
 		card.setBackground(CARD_BG);
-		card.setBorder(BorderFactory.createCompoundBorder(new LineBorder(new Color(0xE0E0E0), 1, true),
+		card.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(new Color(0xE0E0E0), 1, true),
 				new EmptyBorder(20, 20, 20, 20)));
 
 		JLabel lTitre = new JLabel(titre);
@@ -370,29 +424,19 @@ public class Dashboard extends JFrame {
 
 		if (action != null) {
 			JButton btn = new JButton("Ouvrir →") {
-				@Override
-				protected void paintComponent(Graphics g) {
-					g.setColor(getBackground());
-					g.fillRect(0, 0, getWidth(), getHeight());
+				@Override protected void paintComponent(Graphics g) {
+					g.setColor(getBackground()); g.fillRect(0, 0, getWidth(), getHeight());
 					super.paintComponent(g);
 				}
 			};
 			btn.setFont(FONT_LBL.deriveFont(Font.BOLD));
-			btn.setBackground(PRIMARY);
-			btn.setForeground(Color.WHITE);
-			btn.setContentAreaFilled(false);
-			btn.setFocusPainted(false);
-			btn.setBorderPainted(false);
+			btn.setBackground(PRIMARY); btn.setForeground(Color.WHITE);
+			btn.setContentAreaFilled(false); btn.setFocusPainted(false); btn.setBorderPainted(false);
 			btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btn.addActionListener(action);
 			btn.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btn.setBackground(ACCENT);
-				}
-
-				public void mouseExited(MouseEvent e) {
-					btn.setBackground(PRIMARY);
-				}
+				public void mouseEntered(MouseEvent e) { btn.setBackground(ACCENT); }
+				public void mouseExited(MouseEvent e)  { btn.setBackground(PRIMARY); }
 			});
 			card.add(btn, BorderLayout.SOUTH);
 		} else {
@@ -402,5 +446,32 @@ public class Dashboard extends JFrame {
 			card.add(verrou, BorderLayout.SOUTH);
 		}
 		return card;
+	}
+
+	// ════════════════════════════════════════════════════════════════════════════
+	// Bouton d'en-tête stylisé
+	// ════════════════════════════════════════════════════════════════════════════
+
+	private JButton headerBtn(String label, Color bg, Color hover) {
+		JButton b = new JButton(label) {
+			@Override protected void paintComponent(Graphics g) {
+				g.setColor(getBackground()); g.fillRect(0, 0, getWidth(), getHeight());
+				super.paintComponent(g);
+			}
+		};
+		b.setFont(FONT_LBL); b.setBackground(bg); b.setForeground(Color.WHITE);
+		b.setContentAreaFilled(false); b.setFocusPainted(false); b.setBorderPainted(false);
+		b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		b.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) { b.setBackground(hover); }
+			public void mouseExited(MouseEvent e)  { b.setBackground(bg); }
+		});
+		return b;
+	}
+
+	// Renderer fonctionnel pour les tableaux colorés
+	@FunctionalInterface
+	interface TableCellRenderer extends javax.swing.table.TableCellRenderer {
+		Component getTableCellRendererComponent(JTable t, Object v, boolean sel, boolean foc, int r, int c);
 	}
 }
