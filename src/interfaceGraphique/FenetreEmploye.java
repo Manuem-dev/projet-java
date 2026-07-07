@@ -5,8 +5,6 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-
 import service.GestionEmploye;
 import model.Employe;
 import model.Caissier;

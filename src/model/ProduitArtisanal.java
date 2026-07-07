@@ -7,12 +7,10 @@ public class ProduitArtisanal extends Produit {
 
 	// Attributs spécifiques
 	private String categorie; 
-	private String artisan; 
-	private String origine; 
 
 	// Constructeur d'initialisation
 	public ProduitArtisanal(int pReference, int pQuantiteStock, double pPrixAchat, double pPrixVente,
-			String pDesignation, String pCategorie, String pArtisan, String pOrigine) {
+			String pDesignation, String pCategorie) {
 		super(pReference, pQuantiteStock, pPrixAchat, pPrixVente, pDesignation);
 		categorie = pCategorie;
 		
@@ -24,24 +22,12 @@ public class ProduitArtisanal extends Produit {
 		return categorie;
 	}
 
-	public String getArtisan() {
-		return artisan;
-	}
 
-	public String getOrigine() {
-		return origine;
-	}
 
 	// Setters
 	public void setCategorie(String categorie) {
 		this.categorie = categorie;
 	}
 
-	public void setArtisan(String artisan) {
-		this.artisan = artisan;
-	}
 
-	public void setOrigine(String origine) {
-		this.origine = origine;
-	}
 }

@@ -34,12 +34,12 @@ public class FenetreProduit extends JPanel {
 	private JTable table;
 	private JTextField tfRecherche;
 
-	// ── Champs communs ─────────────────────────────────────────────────────────
+	//  Champs communs 
 	private JTextField tfRef, tfDesignation, tfQte, tfPrixAchat, tfPrixVente;
 	private JLabel     lblType;
 	private String     selectedType = null;
 
-	// ── Panneau de champs spécifiques (CardLayout) ─────────────────────────────
+	//  Panneau de champs spécifiques (CardLayout) 
 	private JPanel        specificPanel;
 	private CardLayout    specificLayout;
 
@@ -51,7 +51,6 @@ public class FenetreProduit extends JPanel {
 	// Frais
 	private JTextField tfTemp, tfDate;
 
-	// ─────────────────────────────────────────────────────────────────────────────
 
 	public FenetreProduit(GestionProduit gestionProduit) {
 		this.gestionProduit = gestionProduit;
@@ -61,13 +60,11 @@ public class FenetreProduit extends JPanel {
 		refreshTable(gestionProduit.getListeDesProduits());
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Construction de l'interface
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Construction de l'interface
 
 	private void buildUI() {
 
-		// ── En-tête ────────────────────────────────────────────────────────────
+		//  En-tête 
 		JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		header.setBackground(PRIMARY);
 		header.setBorder(new EmptyBorder(10, 16, 10, 16));
@@ -77,7 +74,7 @@ public class FenetreProduit extends JPanel {
 		header.add(titre);
 		add(header, BorderLayout.NORTH);
 
-		// ── Tableau + barre de recherche ───────────────────────────────────────
+		//  Tableau + barre de recherche 
 		String[] cols = { "Réf.", "Désignation", "Type", "Qté stock", "Prix achat", "Prix vente", "Marge" };
 		tableModel = new DefaultTableModel(cols, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
@@ -117,7 +114,7 @@ public class FenetreProduit extends JPanel {
 		tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
 		add(tablePanel, BorderLayout.CENTER);
 
-		// ── Formulaire bas ─────────────────────────────────────────────────────
+		//  Formulaire bas 
 		JPanel formOuter = new JPanel(new BorderLayout());
 		formOuter.setBackground(Color.WHITE);
 		formOuter.setBorder(BorderFactory.createTitledBorder(
@@ -126,7 +123,7 @@ public class FenetreProduit extends JPanel {
 				TitledBorder.LEFT, TitledBorder.TOP,
 				FONT_LBL.deriveFont(Font.BOLD), PRIMARY));
 
-		// ── Ligne communes : Type | Réf ────────────────────────────────────────
+		//  Ligne communes : Type | Réf 
 		JPanel rowCommon = new JPanel(new GridBagLayout());
 		rowCommon.setBackground(Color.WHITE);
 		GridBagConstraints g = new GridBagConstraints();
@@ -186,7 +183,7 @@ public class FenetreProduit extends JPanel {
 
 		formOuter.add(rowCommon, BorderLayout.NORTH);
 
-		// ── Panneau spécifique (CardLayout) ────────────────────────────────────
+		//  Panneau spécifique (CardLayout) 
 		specificLayout = new CardLayout();
 		specificPanel  = new JPanel(specificLayout);
 		specificPanel.setBackground(Color.WHITE);
@@ -254,7 +251,7 @@ public class FenetreProduit extends JPanel {
 		specificLayout.show(specificPanel, "VIDE");
 		formOuter.add(specificPanel, BorderLayout.CENTER);
 
-		// ── Boutons action ──────────────────────────────────────────────────────
+		//  Boutons action 
 		JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 6));
 		btnRow.setBackground(Color.WHITE);
 		JButton btnAjouter   = blueBtn("➕ Ajouter");
@@ -279,9 +276,7 @@ public class FenetreProduit extends JPanel {
 		});
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Sélection du type et basculement de carte
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Sélection du type et basculement de carte
 
 	private void choisirTypeProduit() {
 		String[] labels = { "📦 Artisanal", "⚡ Électronique", "❄️ Frais" };
@@ -315,9 +310,7 @@ public class FenetreProduit extends JPanel {
 		}
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Rafraîchissement du tableau
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Rafraîchissement du tableau 
 
 	private void refreshTable(ArrayList<Produit> liste) {
 		tableModel.setRowCount(0);
@@ -333,9 +326,7 @@ public class FenetreProduit extends JPanel {
 		}
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Logique CRUD
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Logique CRUD 
 
 	private void ajouterProduit() {
 		if (selectedType == null) {
@@ -355,9 +346,8 @@ public class FenetreProduit extends JPanel {
 			switch (selectedType) {
 				case "Artisanal":
 					gestionProduit.ajoutProduitArtisanal(ref, qte, pa, pv, des,
-							tfCateg.getText().trim(),
-							tfArtisan.getText().trim(),
-							tfOrigine.getText().trim());
+							tfCateg.getText().trim()
+							);
 					break;
 
 				case "Électronique":
@@ -480,8 +470,7 @@ public class FenetreProduit extends JPanel {
 				ProduitArtisanal pa = (ProduitArtisanal) gestionProduit.rechercherProduit(ref);
 				if (pa != null) {
 					tfCateg.setText(pa.getCategorie() != null ? pa.getCategorie() : "");
-					tfArtisan.setText(pa.getArtisan() != null ? pa.getArtisan() : "");
-					tfOrigine.setText(pa.getOrigine() != null ? pa.getOrigine() : "");
+					
 				}
 				break;
 		}
@@ -507,9 +496,7 @@ public class FenetreProduit extends JPanel {
 		table.clearSelection();
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Helpers UI
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Helpers UI 
 
 	private JLabel lbl(String t) {
 		JLabel l = new JLabel(t);

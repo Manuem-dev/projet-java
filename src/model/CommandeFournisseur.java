@@ -13,7 +13,7 @@ public class CommandeFournisseur {
 	public static final String livree = "Livrée";
 	public static final String annulee = "Annulée";
 
-	// Attributs respectant strictement le PDF
+	// Attributs 
 	private int numeroCommande;
 	private Date date;
 	private Fournisseur fournisseur;

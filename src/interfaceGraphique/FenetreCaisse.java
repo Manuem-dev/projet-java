@@ -215,7 +215,7 @@ public class FenetreCaisse extends JPanel {
 		add(right, BorderLayout.EAST);
 	}
 
-	// ── Logique métier ────────────────────────────────────────────────────────
+	//  Logique métier 
 
 	private void choisirCaissier() {
 		// Récupérer les caissiers disponibles depuis gestionEmploye
@@ -394,7 +394,7 @@ public class FenetreCaisse extends JPanel {
 		lblTotal.setText(String.format("Total : %.2f €", venteEnCours.calculerTotal()));
 	}
 
-	// ── Helpers UI ────────────────────────────────────────────────────────────
+	//  Helpers UI 
 	private JPanel section(String titre) {
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));

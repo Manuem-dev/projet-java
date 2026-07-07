@@ -62,17 +62,17 @@ public class Accueil extends JFrame {
 	}
 
 	private void buildUI() {
-		// ── En-tête ──────────────────────────────────────────────────────
+		//  En-tête 
 		JPanel header = new JPanel();
 		header.setBackground(PRIMARY);
 		header.setBorder(new EmptyBorder(30, 24, 30, 24));
-		JLabel titre = new JLabel("Gestion Supermarché");
+		JLabel titre = new JLabel("SUPER MARKET PLUS");
 		titre.setFont(FONT_TTL);
 		titre.setForeground(Color.WHITE);
 		header.add(titre);
 		add(header, BorderLayout.NORTH);
 
-		// ── Formulaire ───────────────────────────────────────────────────
+		//  Formulaire 
 		JPanel formWrapper = new JPanel(new GridBagLayout());
 		formWrapper.setBackground(BG);
 
@@ -155,14 +155,6 @@ public class Accueil extends JFrame {
 		btnConnecter.addActionListener(e -> tentativeConnexion());
 		pfMotDePasse.addActionListener(e -> tentativeConnexion());
 		form.add(btnConnecter, gbc);
-
-		// Hint comptes
-		gbc.gridy = 5;
-		JLabel hint = new JLabel(
-				"<html><center><font color='#9E9E9E'>directeur/dir2024 · caissier1/caisse1 · comptable/compta1 · magasinier/stock123</font></center></html>",
-				SwingConstants.CENTER);
-		hint.setFont(FONT_LBL.deriveFont(11f));
-		form.add(hint, gbc);
 
 		formWrapper.add(form);
 		add(formWrapper, BorderLayout.CENTER);

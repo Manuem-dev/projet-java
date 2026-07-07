@@ -18,7 +18,7 @@ public class GestionProduit {
 	// Ajout de produits
 
 	public void ajoutProduitArtisanal(int pReference, int pQuantiteStock, double pPrixAchat, double pPrixVente,
-			String pDesignation, String pCategorie, String pArtisan, String pOrigine) {
+			String pDesignation, String pCategorie) {
 		if (rechercherProduit(pReference) != null) {
 			System.out.println("Référence déjà existante : " + pReference);
 			return;
@@ -28,7 +28,7 @@ public class GestionProduit {
 			return;
 		}
 		listeDesProduits.add(new ProduitArtisanal(pReference, pQuantiteStock, pPrixAchat, pPrixVente, pDesignation,
-				pCategorie, pArtisan, pOrigine));
+				pCategorie));
 		System.out.println("Produit artisanal ajouté : " + pDesignation);
 	}
 

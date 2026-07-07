@@ -71,7 +71,7 @@ public class Dashboard extends JFrame {
 		header.setBackground(PRIMARY);
 		header.setBorder(new EmptyBorder(14, 24, 14, 24));
 
-		JLabel titre = new JLabel("🛒  Gestion Supermarché");
+		JLabel titre = new JLabel("SUPER MARKET PLUS");
 		titre.setFont(FONT_TTL);
 		titre.setForeground(Color.WHITE);
 		header.add(titre, BorderLayout.WEST);
@@ -102,7 +102,7 @@ public class Dashboard extends JFrame {
 		header.add(rightHeader, BorderLayout.EAST);
 		add(header, BorderLayout.NORTH);
 
-		// ── CardLayout principal ───────────────────────────────────────────────
+		//  CardLayout principal 
 		cardLayout    = new CardLayout();
 		mainContainer = new JPanel(cardLayout);
 		mainContainer.setBackground(BG);
@@ -118,9 +118,7 @@ public class Dashboard extends JFrame {
 		add(mainContainer, BorderLayout.CENTER);
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Menu principal (grille de modules)
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Menu principal (grille de modules)
 
 	private JPanel buildMenu(Utilisateur utilisateur) {
 		JPanel menuPanel = new JPanel(new BorderLayout());
@@ -177,9 +175,7 @@ public class Dashboard extends JFrame {
 		return false;
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Tableau de bord — panneau enrichi
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Tableau de bord — panneau enrichi 
 
 	private JPanel tdbPanel;
 	// Labels KPI
@@ -191,7 +187,7 @@ public class Dashboard extends JFrame {
 		tdbPanel = new JPanel(new BorderLayout(0, 0));
 		tdbPanel.setBackground(BG);
 
-		// ── En-tête du tableau de bord ─────────────────────────────────────────
+		//  En-tête du tableau de bord 
 		JPanel tdbHeader = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		tdbHeader.setBackground(PRIMARY);
 		tdbHeader.setBorder(new EmptyBorder(10, 16, 10, 16));
@@ -215,7 +211,7 @@ public class Dashboard extends JFrame {
 		tdbHeader.add(btnRefresh);
 		tdbPanel.add(tdbHeader, BorderLayout.NORTH);
 
-		// ── Grille KPI (2 × 4) ────────────────────────────────────────────────
+		//  Grille KPI (2 × 4) 
 		tdbCA       = new JLabel("—");
 		tdbVentes   = new JLabel("—");
 		tdbClients  = new JLabel("—");
@@ -241,19 +237,19 @@ public class Dashboard extends JFrame {
 
 		tdbPanel.add(kpiGrid, BorderLayout.CENTER);
 
-		// ── JTabbedPane — 3 onglets détaillés ─────────────────────────────────
+		//  JTabbedPane — 3 onglets détaillés 
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.setFont(FONT_LBL.deriveFont(Font.BOLD));
 		tabs.setBackground(BG);
 
-		// ─ Onglet 1 : Dernières ventes ─────────────────────────────────────
+		//  Onglet 1 : Dernières ventes 
 		String[] colsVentes = { "N° Vente", "Date", "Client", "Caissier", "Montant (€)" };
 		vmVentes = new DefaultTableModel(colsVentes, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
 		};
 		tabs.addTab("📋 Dernières ventes", buildTablePanel(vmVentes, null));
 
-		// ─ Onglet 2 : Alertes stock ────────────────────────────────────────
+		//  Onglet 2 : Alertes stock 
 		String[] colsAlertes = { "Réf.", "Désignation", "Type", "Stock actuel", "Seuil", "Statut" };
 		vmAlertes = new DefaultTableModel(colsAlertes, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
@@ -271,7 +267,7 @@ public class Dashboard extends JFrame {
 		});
 		tabs.addTab("⚠️ Alertes stock", spAlertes);
 
-		// ─ Onglet 3 : Produits périmés ────────────────────────────────────
+		//  Onglet 3 : Produits périmés 
 		String[] colsPerimes = { "Réf.", "Désignation", "Stock", "Date péremption", "Périmé depuis" };
 		vmPerimes = new DefaultTableModel(colsPerimes, 0) {
 			public boolean isCellEditable(int r, int c) { return false; }
@@ -325,16 +321,14 @@ public class Dashboard extends JFrame {
 		return card;
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Rafraîchissement des données du tableau de bord
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Rafraîchissement des données du tableau de bord 
 
 	private void refreshDashboard() {
 		ArrayList<Vente> ventes = gestionCaisseVente.getListeVentes();
 		double ca = 0;
 		for (Vente v : ventes) ca += v.calculerTotal();
 
-		// ── KPI ───────────────────────────────────────────────────────────────
+		//  KPI 
 		tdbCA.setText(String.format("%.2f €", ca));
 		tdbVentes.setText(String.valueOf(ventes.size()));
 		tdbClients.setText(String.valueOf(gestionClient.getListeClients().size()));
@@ -350,7 +344,7 @@ public class Dashboard extends JFrame {
 		tdbPerimes.setText(String.valueOf(perimes.size()));
 		tdbPerimes.setForeground(perimes.size() > 0 ? new Color(0x880E4F) : GREEN);
 
-		// ── Onglet 1 : Ventes ─────────────────────────────────────────────────
+		//  Onglet 1 : Ventes 
 		vmVentes.setRowCount(0);
 		for (Vente v : ventes) {
 			String clientNom  = v.getClient() != null ? v.getClient().getNom() : "—";
@@ -365,7 +359,7 @@ public class Dashboard extends JFrame {
 			});
 		}
 
-		// ── Onglet 2 : Alertes stock ──────────────────────────────────────────
+		//  Onglet 2 : Alertes stock 
 		vmAlertes.setRowCount(0);
 		for (Produit p : gestionProduit.getListeDesProduits()) {
 			if (p.getQuantiteStock() <= 10) {
@@ -379,7 +373,7 @@ public class Dashboard extends JFrame {
 			}
 		}
 
-		// ── Onglet 3 : Produits périmés ───────────────────────────────────────
+		//  Onglet 3 : Produits périmés 
 		vmPerimes.setRowCount(0);
 		for (ProduitFrais pf : perimes) {
 			long jours = java.time.temporal.ChronoUnit.DAYS.between(
@@ -392,18 +386,14 @@ public class Dashboard extends JFrame {
 		}
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Navigation
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Navigation
 
 	private void showCard(String name) {
 		cardLayout.show(mainContainer, name);
 		btnRetour.setVisible(!name.equals("MENU"));
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Carte de menu (module)
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Carte de menu (module)
 
 	private JPanel buildCard(String titre, String description, ActionListener action) {
 		JPanel card = new JPanel(new BorderLayout());
@@ -448,9 +438,7 @@ public class Dashboard extends JFrame {
 		return card;
 	}
 
-	// ════════════════════════════════════════════════════════════════════════════
-	// Bouton d'en-tête stylisé
-	// ════════════════════════════════════════════════════════════════════════════
+	//  Bouton d'en-tête stylisé 
 
 	private JButton headerBtn(String label, Color bg, Color hover) {
 		JButton b = new JButton(label) {

@@ -59,7 +59,7 @@ public class FenetreStock extends JPanel {
 		split.setDividerLocation(380);
 		split.setBackground(BG);
 
-		// ── Rayons ────────────────────────────────────────────────────────
+		// Rayons
 		JPanel panelRayons = new JPanel(new BorderLayout(6, 6));
 		panelRayons.setBackground(BG);
 		panelRayons.setBorder(BorderFactory.createTitledBorder(new LineBorder(new Color(0xBDBDBD), 1), " Rayons ",
@@ -124,7 +124,7 @@ public class FenetreStock extends JPanel {
 		split.setLeftComponent(panelRayons);
 		
 
-		// ── Produits / Stock ──────────────────────────────────────────────
+		//  Produits / Stock 
 		JPanel panelProduits = new JPanel(new BorderLayout(6, 6));
 		panelProduits.setBackground(BG);
 		panelProduits.setBorder(BorderFactory.createTitledBorder(new LineBorder(new Color(0xBDBDBD), 1),
