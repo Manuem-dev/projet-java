@@ -396,8 +396,37 @@ public class FenetreCaisse extends JPanel {
 			double montant = Double.parseDouble(tfMontant.getText().trim().replace(",", "."));
 			Facture f = gestionCaisseVente.finaliserVente(venteEnCours, mode, montant);
 			if (f != null) {
-				JOptionPane.showMessageDialog(this, f.getContenuFacture(), "Facture n°" + f.getNumeroFacture(),
-						JOptionPane.INFORMATION_MESSAGE);
+				JTextArea taFacture = new JTextArea(f.getContenuFacture());
+				taFacture.setEditable(false);
+				taFacture.setFont(new Font("Monospaced", Font.PLAIN, 12));
+				JScrollPane scrollFacture = new JScrollPane(taFacture);
+				scrollFacture.setPreferredSize(new Dimension(400, 500));
+
+				JButton btnPrint = new JButton("🖨️ Imprimer");
+				btnPrint.setFont(FONT_LBL.deriveFont(Font.BOLD));
+				btnPrint.setBackground(PRIMARY);
+				btnPrint.setForeground(Color.WHITE);
+				btnPrint.setFocusPainted(false);
+				btnPrint.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnPrint.addActionListener(ev -> {
+					try {
+						boolean printed = taFacture.print();
+						if (printed) {
+							JOptionPane.showMessageDialog(this, "Impression terminée.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this, "Erreur lors de l'impression : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+				});
+
+				JPanel panelDialog = new JPanel(new BorderLayout(0, 10));
+				panelDialog.add(scrollFacture, BorderLayout.CENTER);
+				JPanel panelBtn = new JPanel(new FlowLayout(FlowLayout.CENTER));
+				panelBtn.add(btnPrint);
+				panelDialog.add(panelBtn, BorderLayout.SOUTH);
+
+				JOptionPane.showMessageDialog(this, panelDialog, "Facture n°" + f.getNumeroFacture(),
+						JOptionPane.PLAIN_MESSAGE);
 				venteEnCours = null;
 				clientEnCours = null;
 				caissierActif = null;
