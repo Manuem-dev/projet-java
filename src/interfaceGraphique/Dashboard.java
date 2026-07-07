@@ -111,7 +111,7 @@ public class Dashboard extends JFrame {
 		mainContainer.add(new FenetreProduit(gestionProduit), "PRODUITS");
 		mainContainer.add(new FenetreClient(gestionClient), "CLIENTS");
 		mainContainer.add(new FenetreStock(gestionProduit, gestionRayon, gestionUtilisateur), "RAYONS");
-		mainContainer.add(new FenetreCaisse(gestionCaisseVente, gestionProduit, gestionClient, gestionEmploye), "CAISSE");
+		mainContainer.add(new FenetreCaisse(gestionCaisseVente, gestionProduit, gestionClient, gestionEmploye, gestionUtilisateur), "CAISSE");
 		mainContainer.add(new FenetreEmploye(gestionEmploye), "EMPLOYES");
 		mainContainer.add(buildDashboardPanel(), "TABLEAU_BORD");
 

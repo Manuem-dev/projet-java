@@ -60,7 +60,7 @@ public class Application {
 
 		//  EXERCICE 4 : Rayons 
 		System.out.println("\n=== EXERCICE 4 : RAYONS ===");
-		ChefRayon chefBoulangerie = new ChefRayon(50, "Durand", "Alice", 3200, "Boulangerie");
+		ChefRayon chefBoulangerie = new ChefRayon(24, "Kouma", "ADANLÉTÉ", 2100, "Boulangerie");
 		ChefRayon chefElectro = new ChefRayon(51, "Lambert", "Paul", 3500, "Électronique");
 		ChefRayon chefFrais = new ChefRayon(52, "Morin", "Lucie", 3000, "Produits frais");
 
@@ -83,7 +83,7 @@ public class Application {
 		Directeur directeur = new Directeur(1, "Boga", "ABALO", 6000);
 		Caissier caissier1 = new Caissier(10, "Petit", "MAMBAFÉI", 2100, 1);
 		Caissier caissier2 = new Caissier(10, "Clément", "BATAKA", 2150, 2);
-		ChefRayon chefRayon = new ChefRayon(24, "Kouma", "ADANLÉTÉ", 2100, "Rayon 2");
+		ChefRayon chefRayon = new ChefRayon( 52, "Morin", "Lucie", 3000,"Rayon 2");
 		Comptable comptable = new Comptable(20, "Simon", "N'TOUDJÉ", 3800);
 		Magasinier magasinier = new Magasinier(30, "Dada", "MINMIN", 2400);
 
@@ -157,7 +157,7 @@ public class Application {
 		System.out.println("\n=== EXERCICE 11 : UTILISATEURS ===");
 		gestionUtil.creerUtilisateur("boga", "aba123", directeur);
 		gestionUtil.creerUtilisateur("petit", "mamba44", caissier1);
-		gestionUtil.creerUtilisateur("kouma", "adan228", chefRayon);
+		gestionUtil.creerUtilisateur("kouma", "adan228", chefBoulangerie);
 		gestionUtil.creerUtilisateur("simon", "sim1983", comptable);
 		gestionUtil.creerUtilisateur("dada", "dada", magasinier);
 

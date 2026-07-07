@@ -11,6 +11,7 @@ import service.GestionCaisseVente;
 import service.GestionProduit;
 import service.GestionClient;
 import service.GestionEmploye;
+import service.GestionUtilisateur;
 import model.*;
 
 /**
@@ -31,10 +32,14 @@ public class FenetreCaisse extends JPanel {
 	private GestionProduit gestionProduit;
 	private GestionClient gestionClient;
 	private GestionEmploye gestionEmploye;
+	private GestionUtilisateur gestionUtilisateur;
 
 	private Vente venteEnCours;
 	private Client clientEnCours;
 	private Caissier caissierActif;
+
+	/** true si le connecté est lui-même un Caissier (attribution automatique) */
+	private boolean modeCaissierConnecte = false;
 
 	private DefaultTableModel tableModel;
 	private JTable table;
@@ -42,19 +47,31 @@ public class FenetreCaisse extends JPanel {
 	private JTextField tfRef, tfQte;
 
 	public FenetreCaisse(GestionCaisseVente gestionCaisseVente, GestionProduit gestionProduit,
-			GestionClient gestionClient, GestionEmploye gestionEmploye) {
+			GestionClient gestionClient, GestionEmploye gestionEmploye, GestionUtilisateur gestionUtilisateur) {
 		this.gestionCaisseVente = gestionCaisseVente;
 		this.gestionProduit = gestionProduit;
 		this.gestionClient = gestionClient;
 		this.gestionEmploye = gestionEmploye;
+		this.gestionUtilisateur = gestionUtilisateur;
 		this.setBackground(BG);
 		setLayout(new BorderLayout(0, 0));
 		buildUI();
+		// Si le connecté est un Caissier, l'assigner automatiquement
+		if (gestionUtilisateur != null && gestionUtilisateur.getUtilisateurConnecte() != null
+				&& gestionUtilisateur.getUtilisateurConnecte().getEmploye() instanceof Caissier) {
+			modeCaissierConnecte = true;
+			assignerCaissierConnecte();
+		}
+	}
+
+	public FenetreCaisse(GestionCaisseVente gestionCaisseVente, GestionProduit gestionProduit,
+			GestionClient gestionClient, GestionEmploye gestionEmploye) {
+		this(gestionCaisseVente, gestionProduit, gestionClient, gestionEmploye, new GestionUtilisateur());
 	}
 
 	// Compatibilité avec l'ancien constructeur sans GestionEmploye
 	public FenetreCaisse(GestionCaisseVente gv, GestionProduit gp, GestionClient gc) {
-		this(gv, gp, gc, new GestionEmploye());
+		this(gv, gp, gc, new GestionEmploye(), new GestionUtilisateur());
 	}
 
 	private void buildUI() {
@@ -109,11 +126,14 @@ public class FenetreCaisse extends JPanel {
 		lblCaissier = new JLabel("— aucun —");
 		lblCaissier.setFont(FONT_LBL.deriveFont(Font.ITALIC));
 		lblCaissier.setForeground(new Color(0x757575));
-		JButton btnCaissier = blueBtn("Choisir caissier…");
-		btnCaissier.addActionListener(e -> choisirCaissier());
 		secCaissier.add(lblCaissier);
 		secCaissier.add(Box.createVerticalStrut(6));
-		secCaissier.add(btnCaissier);
+		// Le bouton n'est affiché que si le connecté N'EST PAS un caissier
+		if (!modeCaissierConnecte) {
+			JButton btnCaissier = blueBtn("Choisir caissier…");
+			btnCaissier.addActionListener(e -> choisirCaissier());
+			secCaissier.add(btnCaissier);
+		}
 		right.add(secCaissier);
 		right.add(Box.createVerticalStrut(10));
 
@@ -216,6 +236,21 @@ public class FenetreCaisse extends JPanel {
 	}
 
 	//  Logique métier 
+
+	/**
+	 * Assigne automatiquement le caissier connecté comme caissier actif.
+	 * Appelé au démarrage si modeCaissierConnecte == true.
+	 */
+	private void assignerCaissierConnecte() {
+		Caissier c = (Caissier) gestionUtilisateur.getUtilisateurConnecte().getEmploye();
+		caissierActif = c;
+		caissierActif.ouvrirCaisse();
+		venteEnCours = gestionCaisseVente.demarrerVente(caissierActif, null);
+		lblCaissier.setText(caissierActif.getPrenom() + " " + caissierActif.getNom());
+		lblCaissier.setForeground(PRIMARY);
+		lblCaissier.setFont(FONT_LBL.deriveFont(Font.BOLD));
+		refreshPanier();
+	}
 
 	private void choisirCaissier() {
 		// Récupérer les caissiers disponibles depuis gestionEmploye
@@ -368,10 +403,15 @@ public class FenetreCaisse extends JPanel {
 				caissierActif = null;
 				tableModel.setRowCount(0);
 				lblTotal.setText("Total : 0,00 €");
-				lblCaissier.setText("— aucun —");
-				lblCaissier.setForeground(new Color(0x757575));
 				lblClientInfo.setText("— aucun —");
 				lblClientInfo.setForeground(new Color(0x757575));
+				// Si c'est un caissier connecté, on le ré-assigne automatiquement
+				if (modeCaissierConnecte) {
+					assignerCaissierConnecte();
+				} else {
+					lblCaissier.setText("— aucun —");
+					lblCaissier.setForeground(new Color(0x757575));
+				}
 			}
 		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(this, "Montant invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);

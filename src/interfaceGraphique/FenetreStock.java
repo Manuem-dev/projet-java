@@ -28,6 +28,9 @@ public class FenetreStock extends JPanel {
 	private GestionRayon gestionRayon;
 	private GestionUtilisateur gestionUtilisateur;
 
+	/** Rayon du ChefRayon connecté, null si l'utilisateur n'est pas un ChefRayon */
+	private Rayon rayonChefConnecte = null;
+
 	private DefaultTableModel tableModelProduits;
 	private DefaultTableModel tableModelRayons;
 	private JTable tableProduits;
@@ -39,6 +42,18 @@ public class FenetreStock extends JPanel {
 		gestionUtilisateur = pGestionUtilisateur;
 		this.setBackground(BG);
 		setLayout(new BorderLayout(10, 10));
+		// Déterminer si le connecté est un ChefRayon et quel est son rayon
+		if (pGestionUtilisateur != null && pGestionUtilisateur.getUtilisateurConnecte() != null
+				&& pGestionUtilisateur.getUtilisateurConnecte().getEmploye() instanceof ChefRayon) {
+			ChefRayon chef = (ChefRayon) pGestionUtilisateur.getUtilisateurConnecte().getEmploye();
+			// Rechercher le rayon dont ce chef est responsable
+			for (Rayon r : pGestionRayon.getListeRayons()) {
+				if (r.getResponsable().getMatricule() == chef.getMatricule()) {
+					rayonChefConnecte = r;
+					break;
+				}
+			}
+		}
 		buildUI();
 		refreshTables();
 	}
@@ -127,8 +142,11 @@ public class FenetreStock extends JPanel {
 		//  Produits / Stock 
 		JPanel panelProduits = new JPanel(new BorderLayout(6, 6));
 		panelProduits.setBackground(BG);
+		String titreProduits = (rayonChefConnecte != null)
+				? " Produits du rayon : " + rayonChefConnecte.getNomRayon() + " "
+				: " Tous les produits & état du stock ";
 		panelProduits.setBorder(BorderFactory.createTitledBorder(new LineBorder(new Color(0xBDBDBD), 1),
-				" Tous les produits & état du stock ", TitledBorder.LEFT, TitledBorder.TOP,
+				titreProduits, TitledBorder.LEFT, TitledBorder.TOP,
 				FONT_LBL.deriveFont(Font.BOLD), PRIMARY));
 		String[] colsP = { "Réf.", "Désignation", "Type", "Stock", "Alerte" };
 		tableModelProduits = new DefaultTableModel(colsP, 0) {
@@ -202,9 +220,15 @@ public class FenetreStock extends JPanel {
 			tableModelRayons.addRow(new Object[] { r.getCodeRayon(), r.getNomRayon(),
 					r.getResponsable().getPrenom() + " " + r.getResponsable().getNom(), r.getListeProduits().size() });
 		}
-		// Produits
+		// Produits : si un ChefRayon est connecté, n'afficher que les produits de son rayon
 		tableModelProduits.setRowCount(0);
-		for (Produit p : gestionProduit.getListeDesProduits()) {
+		java.util.List<Produit> produits;
+		if (rayonChefConnecte != null) {
+			produits = rayonChefConnecte.getListeProduits();
+		} else {
+			produits = gestionProduit.getListeDesProduits();
+		}
+		for (Produit p : produits) {
 			String type = (p instanceof ProduitFrais) ? "Frais"
 					: (p instanceof ProduitElectronique) ? "Électronique" : "Artisanal";
 			String alerte = p.getQuantiteStock() == 0 ? "🔴 Rupture"
